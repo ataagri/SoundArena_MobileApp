@@ -7,7 +7,7 @@
     android:background="@color/black"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".RegisterAct">
+    tools:context=".LoginAct">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
@@ -27,17 +27,17 @@
 
 
             <TextView
-                android:id="@+id/RegisterTopText"
+                android:id="@+id/LoginTopText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="36dp"
                 android:fontFamily="sans-serif-medium"
-                android:text="Sign up to start listening"
+                android:text="Login to Sound Arena"
                 android:textColor="@color/white"
                 android:textSize="36sp" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/RegisterEmail"
+                android:id="@+id/LoginEmail"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
                 android:padding="12dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/RegisterEmailTextBox"
+                    android:id="@+id/LoginEmailTextBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="EMAIL"
@@ -57,7 +57,7 @@
 
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/RegisterPass"
+                android:id="@+id/LoginPass"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -69,7 +69,7 @@
 
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/RegisterPassTextBox"
+                    android:id="@+id/LoginPassTextBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="PASSWORD"
@@ -80,53 +80,40 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/ConfirmPass"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="12dp"
-                app:counterEnabled="true"
-                app:counterMaxLength="15"
-                app:passwordToggleEnabled="true">
-
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/ConfirmPassTextBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="CONFIRM PASSWORD"
-                    android:inputType="textPassword"
-                    android:maxLength="15"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="12dp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/RegisterButton"
+                android:id="@+id/LoginButton"
                 style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="36dp"
-
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
-                android:text="REGISTER"
+                android:text="LOGIN"
                 android:textColor="@color/black"
                 app:backgroundTint="@color/spotifyGreen" />
 
             <TextView
-                android:id="@+id/HaveAcc"
+                android:id="@+id/ForgotPass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:clickable="true"
                 android:contextClickable="true"
                 android:gravity="center_horizontal"
-                android:text="Already have an account? Log in."
+                android:text="Forgot your password?"
                 android:textColor="@color/spotifyGreen"
                 android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/SignUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Don't have an account? Sign up."
+                android:clickable="true"
+                android:gravity="center_horizontal"
+                android:textSize="20sp"
+                android:layout_marginBottom="20dp"
+                android:textColor="@color/spotifyGreen"/>
 
 
         </LinearLayout>
