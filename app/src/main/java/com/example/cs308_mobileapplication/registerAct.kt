@@ -4,15 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.cs308_mobileapplication.ui.theme.CS308_MobileApplicationTheme
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import android.util.Patterns
@@ -21,6 +12,24 @@ import android.view.View
 class RegisterAct : ComponentActivity() {
     fun isValidEmail(email: String): Boolean {
         return email.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+    fun isValidPassword(password: String): Boolean {
+        if (password.length < 8 || password.length > 15) {
+            return false
+        }
+        if (!password.substring(1).contains(Regex("[!@#$%^&*(),.?\":{}|<>]"))) {
+            return false
+        }
+        if (!password.contains(Regex("[A-Z]"))) {
+            return false
+        }
+        if (!password.contains(Regex("[a-z]"))) {
+            return false
+        }
+        if (!password.contains(Regex("[0-9]"))) {
+            return false
+        }
+        return true
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,16 +46,27 @@ class RegisterAct : ComponentActivity() {
         val regConfirmPassBox = findViewById<TextInputEditText>(R.id.ConfirmPassTextBox)
         val regButton = findViewById<MaterialButton>(R.id.RegisterButton)
         val invalidMail = findViewById<TextView>(R.id.InvalidEmail)
+        val invalidPassword = findViewById<TextView>(R.id.InvalidPassword)
+        val passMatchError = findViewById<TextView>(R.id.passMatchError)
 
         regButton.setOnClickListener {
             var email = regEmailBox.text.toString()
             var iPassword = regPassBox.text.toString()
             var cPassword = regConfirmPassBox.text.toString()
             var regBool = true
-            invalidMail.visibility = View.INVISIBLE
+            invalidMail.visibility = View.GONE
+            invalidPassword.visibility = View.GONE
+            passMatchError.visibility = View.GONE
             if (!isValidEmail(email)) {
                 invalidMail.visibility = View.VISIBLE
                 regBool = false
+            }
+            if (!isValidPassword(iPassword)){
+                regBool = false
+                invalidPassword.visibility = View.VISIBLE
+            }
+            if (iPassword != cPassword){
+                passMatchError.visibility = View.VISIBLE
             }
 
         }
