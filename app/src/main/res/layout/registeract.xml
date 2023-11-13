@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="#1C1C1C"
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".RegisterAct">
@@ -34,7 +34,7 @@
                 android:fontFamily="sans-serif-medium"
                 android:text="Sign up to start listening"
                 android:textColor="@color/white"
-                android:textSize="36sp" />
+                android:textSize="33sp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/RegisterEmail"
@@ -42,16 +42,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:padding="12dp">
+                android:padding="8dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/RegisterEmailTextBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="EMAIL"
+                    android:hint="Email address"
                     android:inputType="textEmailAddress"
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="12dp" />
+
+                <TextView
+                    android:id="@+id/InvalidEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:visibility="invisible"
+                    android:gravity="center_horizontal"
+                    android:text="Please enter a valid email."
+                    android:textColor="@color/warningRed" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -72,7 +82,7 @@
                     android:id="@+id/RegisterPassTextBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="PASSWORD"
+                    android:hint="Password"
                     android:inputType="textPassword"
                     android:maxLength="15"
                     android:paddingHorizontal="8dp"
@@ -95,7 +105,7 @@
                     android:id="@+id/ConfirmPassTextBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="CONFIRM PASSWORD"
+                    android:hint="Confirm Password"
                     android:inputType="textPassword"
                     android:maxLength="15"
                     android:paddingHorizontal="8dp"

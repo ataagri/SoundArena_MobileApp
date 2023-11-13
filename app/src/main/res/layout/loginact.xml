@@ -34,7 +34,7 @@
                 android:fontFamily="sans-serif-medium"
                 android:text="Login to Sound Arena"
                 android:textColor="@color/white"
-                android:textSize="36sp" />
+                android:textSize="33sp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/LoginEmail"
