@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.cs308_mobileapplication.ui.theme.CS308_MobileApplicationTheme
 
-class MainActivity : ComponentActivity() {
+class RegisterAct : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
