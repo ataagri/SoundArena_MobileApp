@@ -2,12 +2,57 @@ package com.example.cs308_mobileapplication
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Patterns
+import android.view.View
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
-import android.util.Patterns
-import android.view.View
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
+import retrofit2.http.PUT
+
+
+//Creating Retrofit INSTANCE
+interface UserService {
+    @PUT("signup")
+    fun registerUser(@Body user: User): Call<SignupResponse>
+
+    @PUT("login")
+    fun loginUser(@Body user: User): Call<LoginResponse>
+}
+object RetrofitClient {
+    private const val SERVER_URL = "http://10.0.2.2:3000/"
+
+    val instance: UserService by lazy{
+        val retrofit = Retrofit.Builder()
+            .baseUrl(SERVER_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        retrofit.create(UserService::class.java)
+    }
+}
+
+data class User(
+    val email: String,
+    val password: String
+    // No changes needed here
+)
+
+data class SignupResponse(
+    val userId: String
+)
+
+
+data class LoginResponse(
+    val token: String,
+    val userId: String
+)
 
 class RegisterAct : ComponentActivity() {
     fun isValidEmail(email: String): Boolean {
@@ -31,6 +76,8 @@ class RegisterAct : ComponentActivity() {
         }
         return true
     }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,9 +114,29 @@ class RegisterAct : ComponentActivity() {
             }
             if (iPassword != cPassword){
                 passMatchError.visibility = View.VISIBLE
+                regBool = false
+            }
+
+            if(regBool){
+                val userService = RetrofitClient.instance
+                val call = userService.registerUser(User(email,iPassword))
+
+                call.enqueue(object : Callback<SignupResponse> {
+                    override fun onResponse(call: Call<SignupResponse>, response: Response<SignupResponse>){
+                        if(response.isSuccessful){
+                            val toSignIn = Intent  (this@RegisterAct, LoginAct::class.java)
+                            startActivity(toSignIn)
+                        }
+                    }
+                    override fun onFailure(call: Call<SignupResponse>, t: Throwable) {
+                        // Handle error
+                    }
+                })
             }
 
         }
+
+
     }
 }
 
@@ -85,6 +152,15 @@ class LoginAct : ComponentActivity() {
         }
 
 
+    }
+
+}
+
+class mainpage : ComponentActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?){
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.mainpage)
     }
 
 }
