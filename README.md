@@ -5,9 +5,9 @@ Sound Arena is a mobile application that offers a music reccomendtation. This ap
 
 ## Features
 
-User Registration: Sign up to start listening, with input validation for email and password requirements.
-User Login: Secure login functionality with email and password verification.
-Interactive UI: Modern and user-friendly interface designed for an engaging music experience.
+- User Registration: Sign up to start listening, with input validation for email and password requirements.
+- User Login: Secure login functionality with email and password verification.
+- Interactive UI: Modern and user-friendly interface designed for an engaging music experience.
 
 ## Technical Details
 
