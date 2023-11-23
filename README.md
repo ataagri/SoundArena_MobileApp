@@ -5,7 +5,7 @@ Sound Arena is a mobile application that offers a music reccomendtation. This ap
 
 ## Features
 
-- User Registration: Sign up to start listening, with input validation for email and password requirements.
+- User Registration: Sign up to create an account, with input validation for email and password requirements.
 - User Login: Secure login functionality with email and password verification.
 - Interactive UI: Modern and user-friendly interface designed for an engaging music experience.
 
@@ -16,4 +16,4 @@ Sound Arena is a mobile application that offers a music reccomendtation. This ap
 - **User, SignupResponse, LoginResponse:** Data classes for managing user information and responses.
 - **RegisterAct:** Activity handling user registration with input validation.
 - **LoginAct:** Activity for user login.
-- **mainpage:** Main activity for the app after successful login or registration. (Will be updated)
+- **mainpage:** Main activity for the app after successful login or registration. (*Will be updated*)
