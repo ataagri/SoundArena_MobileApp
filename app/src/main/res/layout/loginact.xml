@@ -53,6 +53,15 @@
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="12dp" />
 
+                <TextView
+                    android:id="@+id/InvalidLogEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Such email address does not exist."
+                    android:textColor="@color/warningRed"
+                    android:visibility="gone" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -77,6 +86,15 @@
                     android:maxLength="15"
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="12dp" />
+
+                <TextView
+                    android:id="@+id/InvalidLogPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Wrong password."
+                    android:textColor="@color/warningRed"
+                    android:visibility="gone" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

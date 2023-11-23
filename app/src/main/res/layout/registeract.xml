@@ -54,11 +54,20 @@
                     android:paddingVertical="12dp" />
 
                 <TextView
-                    android:id="@+id/InvalidEmail"
+                    android:id="@+id/InvalidRegEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:text="Please enter a valid email."
+                    android:textColor="@color/warningRed"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/UsedEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="This email already exists."
                     android:textColor="@color/warningRed"
                     android:visibility="gone" />
 
@@ -88,7 +97,7 @@
                     android:paddingVertical="12dp" />
 
                 <TextView
-                    android:id="@+id/InvalidPassword"
+                    android:id="@+id/InvalidRegPassword"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
