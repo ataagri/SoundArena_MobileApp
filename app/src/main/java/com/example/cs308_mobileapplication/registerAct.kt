@@ -8,15 +8,17 @@ import android.widget.TextView
 import androidx.activity.ComponentActivity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.POST
 import retrofit2.http.PUT
-import okhttp3.logging.HttpLoggingInterceptor
-import okhttp3.OkHttpClient
 
 
 //Creating Retrofit INSTANCE
@@ -24,8 +26,10 @@ interface UserService {
     @PUT("signup")
     fun registerUser(@Body user: User): Call<SignupResponse>
 
-    @PUT("login")
+    @POST("login")
     fun loginUser(@Body user: User): Call<LoginResponse>
+
+
 }
 object RetrofitClient {
     private const val SERVER_URL = "http://10.0.2.2:3000/"
@@ -106,6 +110,7 @@ class RegisterAct : ComponentActivity() {
         val invalidMail = findViewById<TextView>(R.id.InvalidRegEmail)
         val invalidPassword = findViewById<TextView>(R.id.InvalidRegPassword)
         val passMatchError = findViewById<TextView>(R.id.passMatchError)
+        val userExistError = findViewById<TextView>(R.id.UsedEmail)
 
         regButton.setOnClickListener {
             var email = regEmailBox.text.toString()
@@ -115,6 +120,7 @@ class RegisterAct : ComponentActivity() {
             invalidMail.visibility = View.GONE
             invalidPassword.visibility = View.GONE
             passMatchError.visibility = View.GONE
+            userExistError.visibility = View.GONE
             if (!isValidEmail(email)) {
                 invalidMail.visibility = View.VISIBLE
                 regBool = false
@@ -136,7 +142,10 @@ class RegisterAct : ComponentActivity() {
                     override fun onResponse(call: Call<SignupResponse>, response: Response<SignupResponse>){
                         if(response.isSuccessful){
                             val toSignIn = Intent  (this@RegisterAct, LoginAct::class.java)
+                            toSignIn.putExtra("registeredMail", email)
                             startActivity(toSignIn)
+                        }else{
+                            userExistError.visibility = View.VISIBLE
                         }
                     }
                     override fun onFailure(call: Call<SignupResponse>, t: Throwable) {
@@ -152,11 +161,37 @@ class RegisterAct : ComponentActivity() {
 }
 
 class LoginAct : ComponentActivity() {
+    private lateinit var noUser: TextView
+    private lateinit var wrongPass: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.loginact)
 
+        val emailBox = findViewById<TextInputEditText>(R.id.LoginEmailTextBox)
+        val passwordBox = findViewById<TextInputEditText>(R.id.LoginPassTextBox)
         val signUpText = findViewById<TextView>(R.id.SignUp)
+        val loginButton = findViewById<MaterialButton>(R.id.LoginButton)
+        noUser = findViewById<TextView>(R.id.InvalidLogEmail)
+        wrongPass = findViewById<TextView>(R.id.InvalidLogPassword)
+
+
+        val registeredMail = intent.getStringExtra("registeredMail")
+        if(registeredMail != null){
+            emailBox.setText(registeredMail)
+        }
+
+        loginButton.setOnClickListener {
+            var email = emailBox.text.toString()
+            var password = passwordBox.text.toString()
+
+           noUser.visibility = View.GONE
+           wrongPass.visibility = View.GONE
+
+            loginUser(email,password)
+        }
+
+
+
         signUpText.setOnClickListener {
             val toSignup = Intent(this, RegisterAct::class.java)
             startActivity(toSignup)
@@ -165,9 +200,45 @@ class LoginAct : ComponentActivity() {
 
     }
 
+    private fun loginUser(email: String, password:String ){
+        val user = User(email, password)
+        val call = RetrofitClient.instance.loginUser(user)
+
+        call.enqueue(object: Callback<LoginResponse>{
+            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>){
+                if(response.isSuccessful){
+                    val toMainPage = Intent(this@LoginAct, Mainpage::class.java)
+                    startActivity(toMainPage)
+                }else{
+                    val errorBody = response.errorBody()?.string()
+
+                    val jsonObject = JSONObject(errorBody)
+                    val errorMessage = jsonObject.getString("message")
+
+                    when {
+                        "email could not be found" in errorMessage -> {
+                            noUser.visibility = View.VISIBLE
+                            wrongPass.visibility = View.GONE
+                        }
+                        "Wrong password" in errorMessage -> {
+                            wrongPass.visibility = View.VISIBLE
+                            noUser.visibility = View.GONE
+
+
+                        }
+                }
+            }
+            }
+            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                //No connection
+            }
+        })
+
+    }
+
 }
 
-class mainpage : ComponentActivity() {
+class Mainpage : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
