@@ -103,8 +103,8 @@ class RegisterAct : ComponentActivity() {
         val regPassBox = findViewById<TextInputEditText>(R.id.RegisterPassTextBox)
         val regConfirmPassBox = findViewById<TextInputEditText>(R.id.ConfirmPassTextBox)
         val regButton = findViewById<MaterialButton>(R.id.RegisterButton)
-        val invalidMail = findViewById<TextView>(R.id.InvalidEmail)
-        val invalidPassword = findViewById<TextView>(R.id.InvalidPassword)
+        val invalidMail = findViewById<TextView>(R.id.InvalidRegEmail)
+        val invalidPassword = findViewById<TextView>(R.id.InvalidRegPassword)
         val passMatchError = findViewById<TextView>(R.id.passMatchError)
 
         regButton.setOnClickListener {
