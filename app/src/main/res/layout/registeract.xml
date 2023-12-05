@@ -31,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="36dp"
-                android:fontFamily="sans-serif-medium"
+                android:fontFamily="sans-serif-thin"
                 android:text="Sign up to start listening"
                 android:textColor="@color/white"
                 android:textSize="33sp" />
@@ -48,10 +48,12 @@
                     android:id="@+id/RegisterEmailTextBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-thin"
                     android:hint="Email address"
                     android:inputType="textEmailAddress"
                     android:paddingHorizontal="8dp"
-                    android:paddingVertical="12dp" />
+                    android:paddingVertical="12dp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/InvalidRegEmail"
@@ -90,11 +92,13 @@
                     android:id="@+id/RegisterPassTextBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-thin"
                     android:hint="Password"
                     android:inputType="textPassword"
                     android:maxLength="15"
                     android:paddingHorizontal="8dp"
-                    android:paddingVertical="12dp" />
+                    android:paddingVertical="12dp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/InvalidRegPassword"
@@ -122,11 +126,13 @@
                     android:id="@+id/ConfirmPassTextBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-thin"
                     android:hint="Confirm Password"
                     android:inputType="textPassword"
                     android:maxLength="15"
                     android:paddingHorizontal="8dp"
-                    android:paddingVertical="12dp" />
+                    android:paddingVertical="12dp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/passMatchError"
@@ -146,10 +152,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="36dp"
 
+                android:fontFamily="sans-serif-thin"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:text="REGISTER"
                 android:textColor="@color/black"
+                android:textStyle="bold"
                 app:backgroundTint="@color/spotifyGreen" />
 
             <TextView
@@ -159,10 +167,12 @@
                 android:layout_marginBottom="16dp"
                 android:clickable="true"
                 android:contextClickable="true"
+                android:fontFamily="sans-serif-thin"
                 android:gravity="center_horizontal"
                 android:text="Already have an account? Log in."
                 android:textColor="@color/spotifyGreen"
-                android:textSize="20sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
 
         </LinearLayout>

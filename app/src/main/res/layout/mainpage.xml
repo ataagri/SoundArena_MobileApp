@@ -1,43 +1,235 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1C1C1C"
-    android:gravity="center"
+    android:background="@color/backgroundGrey"
     android:orientation="vertical"
-    tools:context=".Mainpage">
+    android:padding="16dp">
 
-    <com.google.android.material.card.MaterialCardView
+    <TextView
+        android:id="@+id/topText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="75dp"
+        android:fontFamily="sans-serif-thin"
+        android:text="Welcome, user."
+        android:textColor="@color/lightGrey"
+        android:textSize="40sp" />
+
+    <TextView
+        android:id="@+id/forYouText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:fontFamily="sans-serif-thin"
+        android:text="Here are some suggestions"
+        android:textColor="@color/lightGrey"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/bottomText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="0dp"
+        android:fontFamily="sans-serif-thin"
+        android:text="just for you"
+        android:textColor="@color/spotifyGreen"
+        android:textSize="30sp" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="25dp"
-        android:theme="@style/Theme.MaterialComponents"
-        app:cardCornerRadius="0dp"
-        app:cardElevation="8dp"
-        app:strokeColor="@color/black"
-        app:strokeWidth="0.5dp">
+        android:background="@color/backgroundGrey"
+        android:orientation="horizontal"
+        android:padding="16dp">
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/firstAlbumCover"
+            android:layout_marginTop="15sp"
+            android:layout_marginLeft="15sp"
+            android:layout_marginRight="10sp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/drake_for_all_the_dogs" />
+
+       <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+           android:layout_marginTop="15sp"
+            android:orientation="vertical"
+            android:paddingStart="16dp">
 
+           <TextView
+               android:id="@+id/firstSongName"
+               android:layout_width="wrap_content"
+               android:layout_height="20sp"
+               android:fontFamily="sans-serif-thin"
+               android:text="IDGAF"
+               android:textColor="@color/white"
+               android:textSize="16sp"
+               android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/MainTopText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="36dp"
-                android:fontFamily="sans-serif-medium"
-                android:text="You are logged in."
-                android:textColor="@color/white"
-                android:textSize="33sp" />
+           <TextView
+               android:id="@+id/firstArtist"
+               android:layout_width="wrap_content"
+               android:layout_height="20dp"
+               android:fontFamily="sans-serif-thin"
+               android:text="Drake, Yeat"
+               android:textColor="@color/white"
+               android:textSize="16sp" />
+
+           <TextView
+               android:id="@+id/firstAlbumInfo"
+               android:layout_width="wrap_content"
+               android:layout_height="20dp"
+               android:fontFamily="sans-serif-thin"
+               android:text="For All The Dogs - 2023"
+               android:textColor="@color/white"
+               android:textSize="16sp" />
 
         </LinearLayout>
 
-    </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/backgroundGrey"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/secondAlbumCover"
+            android:layout_marginLeft="15sp"
+            android:layout_marginRight="10sp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/drake___dark_lane_demo_tapes" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingStart="16dp">
+
+            <TextView
+                android:id="@+id/secondSongName"
+                android:layout_width="wrap_content"
+                android:layout_height="20sp"
+                android:fontFamily="sans-serif-thin"
+                android:text="Pain 1993 (with Playboi Carti)"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/secondArtist"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:fontFamily="sans-serif-thin"
+                android:text="Drake, Playboi Carti"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/secondAlbumInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:fontFamily="sans-serif-thin"
+                android:text="Dark Lane Demo Tapes - 2020"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/backgroundGrey"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/thirdAlbumCover"
+            android:layout_marginLeft="15sp"
+            android:layout_marginRight="10sp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/travis_scott___utopia" /> <!-- Replace with your album cover drawable -->
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingStart="16dp">
+
+            <TextView
+                android:id="@+id/thirdSongName"
+                android:layout_width="wrap_content"
+                android:layout_height="20sp"
+                android:fontFamily="sans-serif-thin"
+                android:text="FE!N"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/thirdArtist"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:fontFamily="sans-serif-thin"
+                android:text="Travis Scott, Playboi Carti"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/thirdAlbumInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:fontFamily="sans-serif-thin"
+                android:text="Utopia - 2023"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/mySongsButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/spotifyGreen"
+            android:textColor="@color/lightGrey"
+            android:fontFamily="sans-serif-thin"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
+            android:text="My Songs"/>
+
+        <Button
+            android:id="@+id/addSongsButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-thin"
+            android:textStyle="bold"
+            android:textColor="@color/spotifyGreen"
+            android:layout_gravity="center_vertical"
+            android:text="Add Song(s)"/>
+    </LinearLayout>
 
 </LinearLayout>
