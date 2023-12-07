@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundGrey"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="My Songs"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/spotifyGreen"
+        android:fontFamily="sans-serif-thin"
+        android:textSize="40dp"
+        android:layout_marginTop="20dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/backgroundGrey"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/thirdAlbumCover"
+            android:layout_marginRight="10sp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/travis_scott___utopia" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/thirdSongName"
+                android:layout_width="wrap_content"
+                android:layout_height="20sp"
+                android:fontFamily="sans-serif-thin"
+                android:text="FE!N"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/thirdArtist"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:fontFamily="sans-serif-thin"
+                android:text="Travis Scott, Playboi Carti"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/thirdAlbumInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:fontFamily="sans-serif-thin"
+                android:text="Utopia - 2023"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:stepSize="1.0"
+                android:rating="1"
+                style="?android:attr/ratingBarStyleSmall" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -162,7 +162,7 @@
             android:layout_marginRight="10sp"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:src="@drawable/travis_scott___utopia" /> <!-- Replace with your album cover drawable -->
+            android:src="@drawable/travis_scott___utopia" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -206,30 +206,32 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:layout_marginTop="50dp"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/mySongsButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="@color/spotifyGreen"
-            android:textColor="@color/lightGrey"
-            android:fontFamily="sans-serif-thin"
-            android:textStyle="bold"
             android:layout_gravity="center_vertical"
-            android:text="My Songs"/>
+            android:layout_weight="1"
+            android:backgroundTint="@color/newGrey"
+            android:fontFamily="sans-serif-thin"
+            android:text="My Songs"
+            android:textColor="@color/spotifyGreen"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/addSongsButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:fontFamily="sans-serif-thin"
-            android:textStyle="bold"
-            android:textColor="@color/spotifyGreen"
             android:layout_gravity="center_vertical"
-            android:text="Add Song(s)"/>
+            android:layout_weight="1"
+            android:backgroundTint="@color/newGrey"
+            android:fontFamily="sans-serif-thin"
+            android:text="Add Song(s)"
+            android:textColor="@color/spotifyGreen"
+            android:textStyle="bold" />
     </LinearLayout>
 
 </LinearLayout>
