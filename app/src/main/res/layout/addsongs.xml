@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/backgroundGrey"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+        <Button
+            android:id="@+id/uploadButton"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:backgroundTint="@color/newGrey"
+            android:fontFamily="sans-serif-thin"
+            android:text="Upload\nFile"
+            android:textColor="@color/spotifyGreen"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/manualButton"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:backgroundTint="@color/newGrey"
+            android:fontFamily="sans-serif-thin"
+            android:text="Enter\nManually"
+            android:textColor="@color/spotifyGreen"
+            android:textStyle="bold" />
+
+</LinearLayout>
