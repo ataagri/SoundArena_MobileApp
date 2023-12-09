@@ -215,6 +215,18 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/allSongsButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:backgroundTint="@color/newGrey"
+            android:fontFamily="sans-serif-thin"
+            android:text="All Songs"
+            android:textColor="@color/spotifyGreen"
+            android:textStyle="bold" />
+
+        <Button
             android:id="@+id/mySongsButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -226,8 +238,16 @@
             android:textColor="@color/spotifyGreen"
             android:textStyle="bold" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="0dp"
+        android:orientation="horizontal">
+
         <Button
-            android:id="@+id/addSongsButton"
+            android:id="@+id/addSongButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -238,18 +258,18 @@
             android:textColor="@color/spotifyGreen"
             android:textStyle="bold" />
 
-    </LinearLayout>
+        <Button
+            android:id="@+id/logOutButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:backgroundTint="@color/newGrey"
+            android:fontFamily="sans-serif-thin"
+            android:text="Log Out"
+            android:textColor="@color/spotifyGreen"
+            android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/logOutButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center"
-        android:backgroundTint="@color/newGrey"
-        android:fontFamily="sans-serif-thin"
-        android:text="Log Out"
-        android:textColor="@color/spotifyGreen"
-        android:textStyle="bold" />
+    </LinearLayout>
 
 </LinearLayout>
