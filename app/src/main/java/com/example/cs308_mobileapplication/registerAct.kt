@@ -2,10 +2,14 @@ package com.example.cs308_mobileapplication
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Patterns
 import android.view.View
+import android.widget.Button
+import android.widget.RatingBar
 import android.widget.TextView
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.interaction.PressInteraction
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import okhttp3.OkHttpClient
@@ -243,8 +247,80 @@ class Mainpage : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.mainpage)
+        val mySongsButton = findViewById<Button>(R.id.mySongsButton)
+        val addSongsButton = findViewById<Button>(R.id.addSongsButton)
+
+        mySongsButton.setOnClickListener{
+            val toMySongs = Intent(this, Mysongs::class.java)
+            startActivity(toMySongs)
+        }
+
+        addSongsButton.setOnClickListener {
+            val toAddSong = Intent(this, Addsongs::class.java)
+            startActivity(toAddSong)
+        }
+
     }
 
+
+
 }
+
+class Mysongs : ComponentActivity(){
+
+    override fun onCreate(savedInstanceState: Bundle?){
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.mysongs)
+
+        val mainMenuButton = findViewById<Button>(R.id.mainMenuButton)
+
+        mainMenuButton.setOnClickListener{
+            val toMainpage = Intent(this, Mainpage::class.java)
+            startActivity(toMainpage)
+        }
+    }
+}
+
+class Addsongs : ComponentActivity(){
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.addsongs)
+
+        val enterManuallyButton = findViewById<Button>(R.id.manualButton)
+
+        enterManuallyButton.setOnClickListener {
+            val toEnterManually = Intent(this, Entermanually::class.java)
+            startActivity(toEnterManually)
+        }
+    }
+}
+
+class Entermanually : ComponentActivity(){
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.entermanually)
+
+        val mainPageButton = findViewById<Button>(R.id.mainMenuButton)
+        mainPageButton.setOnClickListener {
+            val toMainpage = Intent(this, Mainpage::class.java)
+            startActivity(toMainpage)
+        }
+
+        val songNameBox = findViewById<TextInputEditText>(R.id.songName)
+        val artistNameBox = findViewById<TextInputEditText>(R.id.artistName)
+        val albumNameBox = findViewById<TextInputEditText>(R.id.albumName)
+        val releaseYearBox = findViewById<TextInputEditText>(R.id.releaseYear)
+        val ratingBar = findViewById<RatingBar>(R.id.rate)
+        val addSongButton = findViewById<Button>(R.id.addSong)
+
+        addSongButton.setOnClickListener {
+            
+        }
+    }
+}
+
+
 
 

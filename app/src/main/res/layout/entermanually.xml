@@ -31,6 +31,7 @@
                     android:fontFamily="sans-serif-thin"
                     android:hint="Song Name"
                     android:inputType="text"
+                    android:textColor="@color/white"
                     android:textStyle="bold" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -49,6 +50,7 @@
                     android:layout_weight="1"
                     android:fontFamily="sans-serif-thin"
                     android:hint="Artist(s)"
+                    android:textColor="@color/white"
                     android:inputType="text"
                     android:textStyle="bold" />
 
@@ -68,6 +70,7 @@
                     android:layout_weight="1"
                     android:fontFamily="sans-serif-thin"
                     android:hint="Album"
+                    android:textColor="@color/white"
                     android:inputType="text"
                     android:textStyle="bold" />
 
@@ -88,6 +91,8 @@
                     android:fontFamily="sans-serif-thin"
                     android:hint="Release Year"
                     android:inputType="text"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
                     android:textStyle="bold" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -98,8 +103,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:numStars="5"
-                android:stepSize="1.0"
-                android:rating="1"
+                android:stepSize="0.5"
+                android:rating="0"
                 style="?android:attr/ratingBarStyle" />
 
             <Button

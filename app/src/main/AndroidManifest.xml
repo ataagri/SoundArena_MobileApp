@@ -13,6 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CS308_MobileApplication"
+        android:largeHeap="true"
         tools:targetApi="34">
         <activity
             android:name=".RegisterAct"
@@ -27,6 +28,9 @@
         </activity>
         <activity android:name=".LoginAct"/>
         <activity android:name=".Mainpage"/>
+        <activity android:name=".Mysongs"/>
+        <activity android:name=".Entermanually"/>
+        <activity android:name=".Addsongs"/>
     </application>
 
 </manifest>

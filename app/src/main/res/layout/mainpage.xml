@@ -55,7 +55,8 @@
             android:layout_marginRight="10sp"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:src="@drawable/drake_for_all_the_dogs" />
+            android:src="@drawable/nophoto"
+            />
 
        <LinearLayout
             android:layout_width="wrap_content"
@@ -110,7 +111,8 @@
             android:layout_marginRight="10sp"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:src="@drawable/drake___dark_lane_demo_tapes" />
+            android:src = "@drawable/nophoto"
+             />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -164,7 +166,8 @@
             android:layout_marginRight="10sp"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:src="@drawable/travis_scott___utopia" />
+            android:src = "@drawable/nophoto"
+             />
 
         <LinearLayout
             android:layout_width="wrap_content"
