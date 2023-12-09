@@ -21,7 +21,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
-                android:padding="12dp">
+                android:padding="12dp"
+                android:textColorHint="@color/newGrey">
+
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/songName"
@@ -50,6 +52,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColorHint="@color/newGrey"
                 android:padding="12dp">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -78,6 +81,7 @@
                 android:id="@+id/albumNameLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
+                android:textColorHint="@color/newGrey"
                 android:layout_height="wrap_content"
                 android:padding="12dp">
 
@@ -104,6 +108,19 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <Spinner
+                android:id="@+id/genreSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="12dp"
+                android:layout_marginLeft="12dp"
+                android:textColorHint="@color/newGrey"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:layout_marginRight="12dp"
+                android:entries="@array/genres"/>
+
+            <Spinner
                 android:id="@+id/ratingSpinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -114,18 +131,6 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="12dp"
                 android:entries="@array/rating_numbers"/>
-
-            <Spinner
-                android:id="@+id/genreSpinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:padding="12dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
-                android:layout_marginRight="12dp"
-                android:entries="@array/genres"/>
 
             <TextView
                 android:id="@+id/genreError"

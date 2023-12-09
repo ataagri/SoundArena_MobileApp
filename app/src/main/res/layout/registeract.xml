@@ -87,7 +87,6 @@
                 app:counterMaxLength="15"
                 app:passwordToggleEnabled="true">
 
-
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/RegisterPassTextBox"
                     android:layout_width="match_parent"
