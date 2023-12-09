@@ -1,5 +1,6 @@
 package com.example.cs308_mobileapplication
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -13,6 +14,7 @@ import androidx.compose.foundation.interaction.PressInteraction
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONObject
 import retrofit2.Call
@@ -23,6 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import kotlin.math.log
 
 
 //Creating Retrofit INSTANCE
@@ -32,6 +35,9 @@ interface UserService {
 
     @POST("login")
     fun loginUser(@Body user: User): Call<LoginResponse>
+
+    @POST("admin/add-song")
+    fun postAddSong(@Body songData: SongData): Call<AddSongResponse>
 
 
 }
@@ -72,6 +78,36 @@ data class LoginResponse(
     val token: String,
     val userId: String
 )
+data class SongData(
+    val title: String,
+    val genre: String,
+    val album: String,
+    val performer: List<String>,
+    val rating: Float? = null,
+    val userID: String
+)
+data class AddSongResponse(
+    val message: String
+)
+fun saveUserId(context: Context, userId: String){
+    val sharedPreferences = context.getSharedPreferences("MySharedPref",Context.MODE_PRIVATE)
+    val editor = sharedPreferences.edit()
+    editor.putString("UserID",userId)
+    editor.apply()
+}
+
+fun getUserId(context: Context): String? {
+    val sharedPreferences = context.getSharedPreferences("MySharedPref", Context.MODE_PRIVATE)
+    return sharedPreferences.getString("userId", null)
+}
+
+fun clearUserId(context: Context) {
+    val sharedPreferences = context.getSharedPreferences("MySharedPref", Context.MODE_PRIVATE)
+    val editor = sharedPreferences.edit()
+    editor.remove("userId")
+    editor.apply()
+}
+
 
 class RegisterAct : ComponentActivity() {
     fun isValidEmail(email: String): Boolean {
@@ -211,6 +247,9 @@ class LoginAct : ComponentActivity() {
         call.enqueue(object: Callback<LoginResponse>{
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>){
                 if(response.isSuccessful){
+                    response.body()?.let {
+                        saveUserId(this@LoginAct, it.userId)
+                    }
                     val toMainPage = Intent(this@LoginAct, Mainpage::class.java)
                     startActivity(toMainPage)
                 }else{
@@ -249,6 +288,7 @@ class Mainpage : ComponentActivity() {
         setContentView(R.layout.mainpage)
         val mySongsButton = findViewById<Button>(R.id.mySongsButton)
         val addSongsButton = findViewById<Button>(R.id.addSongsButton)
+        val logOutButton = findViewById<Button>(R.id.logOutButton)
 
         mySongsButton.setOnClickListener{
             val toMySongs = Intent(this, Mysongs::class.java)
@@ -258,6 +298,12 @@ class Mainpage : ComponentActivity() {
         addSongsButton.setOnClickListener {
             val toAddSong = Intent(this, Addsongs::class.java)
             startActivity(toAddSong)
+        }
+
+        logOutButton.setOnClickListener {
+            val toLogin = Intent(this, LoginAct::class.java)
+            clearUserId(this@Mainpage)
+            startActivity(toLogin)
         }
 
     }
@@ -316,10 +362,31 @@ class Entermanually : ComponentActivity(){
         val addSongButton = findViewById<Button>(R.id.addSong)
 
         addSongButton.setOnClickListener {
-            
+            var songName = songNameBox.text.toString()
+            var artistName = artistNameBox.text.toString()
+            var albumName = albumNameBox.text.toString()
+            val releaseYear = releaseYearBox.text.toString()
+            val rating = ratingBar.rating.toFloat()
+            val userID = getUserId(this@Entermanually).toString()
+
+            var songData = SongData(
+                title = songName,
+                performer = artistName.split(", "),
+                album = albumName,
+                rating = rating,
+                userID = userID,
+                genre = "Implement Later"
+            )
+            RetrofitClient.instance.postAddSong(songData).enqueue(object : Callback<AddSongResponse>{
+
+            })
+
+
         }
     }
 }
+
+
 
 
 
