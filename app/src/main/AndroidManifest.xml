@@ -31,6 +31,7 @@
         <activity android:name=".Mysongs"/>
         <activity android:name=".Entermanually"/>
         <activity android:name=".Addsongs"/>
+        <activity android:name=".Allsongs"/>
     </application>
 
 </manifest>

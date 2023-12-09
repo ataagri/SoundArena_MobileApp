@@ -4,13 +4,16 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.Button
 import android.widget.RatingBar
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.interaction.PressInteraction
+import androidx.core.view.get
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import okhttp3.OkHttpClient
@@ -23,6 +26,8 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import kotlin.math.log
@@ -37,7 +42,13 @@ interface UserService {
     fun loginUser(@Body user: User): Call<LoginResponse>
 
     @POST("admin/add-song")
-    fun postAddSong(@Body songData: SongData): Call<AddSongResponse>
+    fun postAddSong(
+        @Header("Authorization") authToken: String,
+        @Body songData: SongData
+    ): Call<AddSongResponse>
+
+    @GET("/")
+    fun getSongs(): Call<List<Song>>
 
 
 }
@@ -73,6 +84,12 @@ data class SignupResponse(
     val userId: String
 )
 
+data class Song(
+    val name: String,
+    val performer: String,
+    val album: String
+)
+
 
 data class LoginResponse(
     val token: String,
@@ -83,22 +100,21 @@ data class SongData(
     val genre: String,
     val album: String,
     val performer: List<String>,
-    val rating: Float? = null,
-    val userID: String
+    val rating: Int? = null,
 )
 data class AddSongResponse(
     val message: String
 )
-fun saveUserId(context: Context, userId: String){
+fun saveUserId(context: Context, userToken: String){
     val sharedPreferences = context.getSharedPreferences("MySharedPref",Context.MODE_PRIVATE)
     val editor = sharedPreferences.edit()
-    editor.putString("UserID",userId)
+    editor.putString("token","Bearer " + userToken)
     editor.apply()
 }
 
 fun getUserId(context: Context): String? {
     val sharedPreferences = context.getSharedPreferences("MySharedPref", Context.MODE_PRIVATE)
-    return sharedPreferences.getString("userId", null)
+    return sharedPreferences.getString("token", null)
 }
 
 fun clearUserId(context: Context) {
@@ -248,7 +264,7 @@ class LoginAct : ComponentActivity() {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>){
                 if(response.isSuccessful){
                     response.body()?.let {
-                        saveUserId(this@LoginAct, it.userId)
+                        saveUserId(this@LoginAct, it.token)
                     }
                     val toMainPage = Intent(this@LoginAct, Mainpage::class.java)
                     startActivity(toMainPage)
@@ -287,8 +303,9 @@ class Mainpage : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.mainpage)
         val mySongsButton = findViewById<Button>(R.id.mySongsButton)
-        val addSongsButton = findViewById<Button>(R.id.addSongsButton)
+        val addSongsButton = findViewById<Button>(R.id.addSongButton)
         val logOutButton = findViewById<Button>(R.id.logOutButton)
+        val allSongsButton = findViewById<Button>(R.id.allSongsButton)
 
         mySongsButton.setOnClickListener{
             val toMySongs = Intent(this, Mysongs::class.java)
@@ -304,6 +321,11 @@ class Mainpage : ComponentActivity() {
             val toLogin = Intent(this, LoginAct::class.java)
             clearUserId(this@Mainpage)
             startActivity(toLogin)
+        }
+
+        allSongsButton.setOnClickListener {
+            val toAllSongs = Intent(this, Allsongs::class.java)
+            startActivity(toAllSongs)
         }
 
     }
@@ -357,33 +379,120 @@ class Entermanually : ComponentActivity(){
         val songNameBox = findViewById<TextInputEditText>(R.id.songName)
         val artistNameBox = findViewById<TextInputEditText>(R.id.artistName)
         val albumNameBox = findViewById<TextInputEditText>(R.id.albumName)
-        val releaseYearBox = findViewById<TextInputEditText>(R.id.releaseYear)
-        val ratingBar = findViewById<RatingBar>(R.id.rate)
+        val genreSpinner = findViewById<Spinner>(R.id.genreSpinner)
+        val ratingSpinner = findViewById<Spinner>(R.id.ratingSpinner)
         val addSongButton = findViewById<Button>(R.id.addSong)
+        val songError = findViewById<TextView>(R.id.nameError)
+        val artistError = findViewById<TextView>(R.id.artistError)
+        val albumError = findViewById<TextView>(R.id.albumError)
+        val genreError = findViewById<TextView>(R.id.genreError)
+        var addSongBool: Boolean = true
+
 
         addSongButton.setOnClickListener {
+            addSongBool = true
+            songError.visibility = View.GONE
+            artistError.visibility = View.GONE
+            albumError.visibility = View.GONE
+            genreError.visibility = View.GONE
+
             var songName = songNameBox.text.toString()
+            if (songName == ""){
+                songError.visibility = View.VISIBLE
+                addSongBool = false
+
+            }
             var artistName = artistNameBox.text.toString()
+            if(artistName == ""){
+                artistError.visibility = View.VISIBLE
+                addSongBool = false
+            }
             var albumName = albumNameBox.text.toString()
-            val releaseYear = releaseYearBox.text.toString()
-            val rating = ratingBar.rating.toFloat()
-            val userID = getUserId(this@Entermanually).toString()
+            if(albumName == ""){
+                albumError.visibility = View.VISIBLE
+                addSongBool = false
+            }
+            var genre = genreSpinner.selectedItem.toString()
+            if (genre == "Select Genre"){
+                genreError.visibility = View.VISIBLE
+                addSongBool = false
+            }
+            var rating: String = ratingSpinner.selectedItem.toString()
+            var postRating: Int?
+            if(rating == "Rate"){
+                postRating = null
+            }else{
+                postRating = rating.toInt()
+            }
+            val userToken = getUserId(this@Entermanually).toString()
 
-            var songData = SongData(
-                title = songName,
-                performer = artistName.split(", "),
-                album = albumName,
-                rating = rating,
-                userID = userID,
-                genre = "Implement Later"
-            )
-            RetrofitClient.instance.postAddSong(songData).enqueue(object : Callback<AddSongResponse>{
+            if(addSongBool){
+                var songData = SongData(
+                    title = songName,
+                    performer = artistName.split(", "),
+                    album = albumName,
+                    rating = postRating,
+                    genre = genre
+                )
+                RetrofitClient.instance.postAddSong(userToken,songData).enqueue(object : Callback<AddSongResponse>{
+                    override fun onResponse(call: Call<AddSongResponse>, response: Response<AddSongResponse>) {
+                        if (response.isSuccessful) {
 
-            })
+                            val addSongResponse = response.body()
+                            addSongResponse?.let {
+
+                                Log.d("AddSongSuccess", "Song added successfully: ${it.message}")
+                            }
+
+                        } else {
+
+                            val errorResponse = response.errorBody()?.string()
+                            Log.e("AddSongError", "Error adding song: $errorResponse")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<AddSongResponse>, t: Throwable) {
+                        // no internet
+                        Log.e("AddSongFailure", "Network failure or systemic error: ${t.message}")
+                    }
+
+                })
+            }
+
 
 
         }
     }
+}
+
+class Allsongs : ComponentActivity(){
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.allsongs)
+        RetrofitClient.instance.getSongs().enqueue(object : Callback<List<Song>>{
+            override fun onResponse(call: Call<List<Song>>, response: Response<List<Song>>) {
+                if (response.isSuccessful) {
+
+                    val songs = response.body()
+                    songs?.let {
+
+                        Log.d("AddSongSuccess", "Song added successfully: ${songs}")
+                    }
+
+                }else{
+                    val errorResponse = response.errorBody()?.string()
+                    Log.e("Error", "Error Listing Songs: $errorResponse")
+                }
+            }
+
+            override fun onFailure(call: Call<List<Song>>, t: Throwable) {
+                // Handle failure
+            }
+        })
+
+    }
+
+
 }
 
 
