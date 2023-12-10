@@ -501,8 +501,6 @@ class Allsongs : ComponentActivity(){
         })
 
     }
-
-
 }
 
 fun parseSongs(jsonResponse: String): List<Song> {
