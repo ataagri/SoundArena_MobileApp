@@ -93,7 +93,7 @@ data class Song(
     val title: String,
     val performers: List<Performer>,
     val album: Album,
-    val genre: String
+    val genre: String,
 )
 
 data class Performer(
@@ -516,8 +516,23 @@ fun parseSongs(jsonResponse: String): List<Song> {
     return songs
 }
 
+public class Item{
+    constructor(song : Song) {
+        this.name = song.title
+        this.album = song.album.name
+        song.performers.forEach{performer ->
+            this.artist += performer.name
+            this.artist += ", "
+        }
+        this.artist = this.artist.dropLast(2)
+        this.rating = rating
+        this.image = image
+    }
 
+    var name : String = ""
+    var album : String = ""
+    var artist : String = ""
+    var rating : Float = 0f
+    var image : Int = 0
 
-
-
-
+}
