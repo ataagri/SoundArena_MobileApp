@@ -491,8 +491,6 @@ class Allsongs : ComponentActivity(){
         })
 
     }
-
-
 }
 
 
