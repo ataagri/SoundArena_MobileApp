@@ -36,13 +36,13 @@
         android:text="Album"/>
 
     <TextView
+        android:id="@+id/genre"
         android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:id="@+id/genre"
-        android:layout_toEndOf="@id/imageview"
-        android:textColor="@color/black"
         android:layout_below="@id/album"
-        android:text="Genre"/>
+        android:layout_toEndOf="@id/imageview"
+        android:text="Genre"
+        android:textColor="@color/black" />
 
     <Spinner
         android:id="@+id/rating"
