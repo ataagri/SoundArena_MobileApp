@@ -8,12 +8,14 @@ import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.core.view.get
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.Gson
@@ -517,11 +519,11 @@ fun parseSongs(jsonResponse: String): List<Song> {
     return songs
 }
 
-public class Item{
-    constructor(song : Song) {
+public class Item {
+    constructor(song: Song) {
         this.name = song.title
         this.album = song.album.name
-        song.performers.forEach{performer ->
+        song.performers.forEach { performer ->
             this.artist += performer.name
             this.artist += ", "
         }
@@ -530,10 +532,24 @@ public class Item{
         this.image = image
     }
 
-    var name : String = ""
-    var album : String = ""
-    var artist : String = ""
-    var rating : Float = 0f
-    var image : Int = 0
+    var name: String = ""
+    var album: String = ""
+    var artist: String = ""
+    var rating: Float = 0f
+    var image: Int = 0
+
+}
+
+public class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    lateinit var imageView : ImageView
+    lateinit var songName : TextView
+    lateinit var artist : TextView
+    lateinit var album : TextView
+    lateinit var genre : TextView
+    lateinit var ratingSpinner: Spinner
+
+
+
+
 
 }
