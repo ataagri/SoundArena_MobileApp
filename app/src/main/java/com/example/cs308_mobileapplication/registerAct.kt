@@ -35,6 +35,7 @@ import retrofit2.http.PUT
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import com.google.gson.annotations.SerializedName
 import kotlin.math.log
 
 
@@ -90,6 +91,8 @@ data class SignupResponse(
 )
 
 data class Song(
+    @SerializedName("_id")
+    val id: String,
     val title: String,
     val performers: List<Performer>,
     val album: Album,
@@ -488,14 +491,12 @@ class Allsongs : ComponentActivity(){
                 if (response.isSuccessful) {
                     val jsonResponse = response.body().toString()
                     val songList = parseSongs(jsonResponse)
-                    Log.d("XDD", "song name: " + songList.get(1).title)
-                } else {
-                    // Handle the error case
+                    Log.d("XDD", "SongID: " + songList.get(0).id)
                 }
             }
 
             override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                // Handle the failure case
+
             }
         })
 
