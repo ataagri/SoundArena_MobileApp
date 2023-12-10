@@ -1,54 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    
-    <ImageView
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_centerVertical="true"
-        android:id="@+id/imageview"/>
+    android:layout_height="wrap_content"
+    android:padding="16dp">
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="30dp"
         android:id="@+id/name"
-        android:layout_toEndOf="@id/imageview"
+        android:layout_marginRight="20dp"
         android:textColor="@color/black"
         android:text="Song Name"/>
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="30dp"
         android:id="@+id/artists"
+        android:layout_marginRight="20dp"
         android:layout_below="@id/name"
-        android:layout_toEndOf="@id/imageview"
         android:textColor="@color/black"
         android:text="Artist(s)"/>
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="30dp"
         android:id="@+id/album"
-        android:layout_toEndOf="@id/imageview"
+        android:layout_marginRight="20dp"
         android:textColor="@color/black"
-        android:layout_below="@id/name"
+        android:layout_below="@id/artists"
         android:text="Album"/>
 
     <TextView
         android:id="@+id/genre"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="30dp"
         android:layout_below="@id/album"
-        android:layout_toEndOf="@id/imageview"
+        android:layout_marginRight="20dp"
         android:text="Genre"
         android:textColor="@color/black" />
 
     <Spinner
         android:id="@+id/rating"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:entries="@array/rating_numbers"
+        android:layout_height="30dp"
         android:layout_below="@id/genre"
-        android:layout_toEndOf="@id/imageview"/>
+        android:layout_marginRight="20dp"
+        android:entries="@array/rating_numbers"/>
 </RelativeLayout>

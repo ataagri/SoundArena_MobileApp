@@ -6,9 +6,12 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
 import android.util.Patterns
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.RatingBar
 import android.widget.Spinner
 import android.widget.TextView
@@ -99,7 +102,9 @@ data class Song(
     val performers: List<Performer>,
     val album: Album,
     val genre: String,
+    val rating: Int
 )
+
 
 data class Performer(
     val name: String
@@ -484,72 +489,82 @@ class Entermanually : ComponentActivity(){
     }
 }
 
-class Allsongs : ComponentActivity(){
+fun parseSongs(jsonResponse: String): List<Song> {
+    val gson = Gson()
+    try {
+        val jsonObject = gson.fromJson(jsonResponse, JsonObject::class.java)
+        val jsonSongsArray = jsonObject.getAsJsonArray("songs")  // Extract the "songs" array
+
+        val songs = mutableListOf<Song>()
+        jsonSongsArray.forEach { jsonElement ->
+            val song = gson.fromJson(jsonElement, Song::class.java)
+            songs.add(song)
+        }
+
+        return songs
+    } catch (e: Exception) {
+        Log.e("parseSongs", "Error parsing songs: ${e.message}")
+        return emptyList()  // Return an empty list in case of error
+    }
+}
+
+
+class Allsongs : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.allsongs)
+        setContentView(R.layout.allsongsnew)
         RetrofitClient.instance.getSongs().enqueue(object : Callback<JsonObject> {
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                 if (response.isSuccessful) {
                     val jsonResponse = response.body().toString()
                     val songList = parseSongs(jsonResponse)
-                    Log.d("XDD", "SongID: " + songList.get(0).id)
+                    Log.d("XDD",songList.get(1).title)
+                    addSongsToView(songList) // Call this method to add views
                 }
             }
 
             override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-
-            }
+                Log.e("Allsongs", "Network error: ${t.message}")            }
         })
-
-    }
-}
-
-fun parseSongs(jsonResponse: String): List<Song> {
-    val gson = Gson()
-    val jsonObject = gson.fromJson(jsonResponse, JsonObject::class.java)
-    val jsonSongsArray = jsonObject.getAsJsonArray("songs") // Extract the "songs" array
-    val songs = mutableListOf<Song>()
-
-    jsonSongsArray.forEach { jsonElement ->
-        val song = gson.fromJson(jsonElement, Song::class.java)
-        songs.add(song)
     }
 
-    return songs
-}
+    private fun addSongsToView(songs: List<Song>) {
+        val container: LinearLayout = findViewById(R.id.songsContainer)
+        for (song in songs) {
+            val songView = LayoutInflater.from(this).inflate(R.layout.song_view, container, false)
+            val nameTextView: TextView = songView.findViewById(R.id.name)
+            val artistsTextView: TextView = songView.findViewById(R.id.artists)
+            val albumTextView: TextView = songView.findViewById(R.id.album)
+            val genreTextView: TextView = songView.findViewById(R.id.genre)
+            val ratingSpinner: Spinner = songView.findViewById(R.id.rating)
 
-public class Item {
-    constructor(song: Song) {
-        this.name = song.title
-        this.album = song.album.name
-        song.performers.forEach { performer ->
-            this.artist += performer.name
-            this.artist += ", "
+            // Set the song details
+            nameTextView.text = song.title
+            artistsTextView.text = song.performers.joinToString { performer -> performer.name }
+            albumTextView.text = song.album.name
+            genreTextView.text = song.genre
+
+            // Set up the spinner
+            setupRatingSpinner(ratingSpinner, song.rating)
+
+            // Add the view to the container
+            container.addView(songView)
         }
-        this.artist = this.artist.dropLast(2)
-        this.rating = rating
-        this.image = image
     }
 
-    var name: String = ""
-    var album: String = ""
-    var artist: String = ""
-    var rating: Float = 0f
-    var image: Int = 0
+    private fun setupRatingSpinner(spinner: Spinner, rating: Int?) {
+        val ratingAdapter = ArrayAdapter.createFromResource(
+            this,
+            R.array.rating_numbers,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = adapter
+        }
 
-}
-
-public class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    lateinit var imageView : ImageView
-    lateinit var songName : TextView
-    lateinit var artist : TextView
-    lateinit var album : TextView
-    lateinit var genre : TextView
-    lateinit var ratingSpinner: Spinner
-
-
-
-
-
+        rating?.let {
+            val ratingPosition = ratingAdapter.getPosition(it.toString())
+            spinner.setSelection(ratingPosition, true)
+        }
+    }
 }
