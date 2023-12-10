@@ -16,6 +16,8 @@ import androidx.compose.foundation.interaction.PressInteraction
 import androidx.core.view.get
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
+import com.google.gson.Gson
+import com.google.gson.JsonParser
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
@@ -30,6 +32,9 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import com.google.gson.JsonArray
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
 import kotlin.math.log
 
 
@@ -48,7 +53,7 @@ interface UserService {
     ): Call<AddSongResponse>
 
     @GET("/")
-    fun getSongs(): Call<List<Song>>
+    fun getSongs(): Call<JsonObject>
 
 
 }
@@ -85,9 +90,18 @@ data class SignupResponse(
 )
 
 data class Song(
-    val name: String,
-    val performer: String,
-    val album: String
+    val title: String,
+    val performers: List<Performer>,
+    val album: Album,
+    val genre: String
+)
+
+data class Performer(
+    val name: String
+)
+
+data class Album(
+    val name: String
 )
 
 
@@ -469,30 +483,39 @@ class Allsongs : ComponentActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.allsongs)
-        RetrofitClient.instance.getSongs().enqueue(object : Callback<List<Song>>{
-            override fun onResponse(call: Call<List<Song>>, response: Response<List<Song>>) {
+        RetrofitClient.instance.getSongs().enqueue(object : Callback<JsonObject> {
+            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                 if (response.isSuccessful) {
-
-                    val songs = response.body()
-                    songs?.let {
-
-                        Log.d("AddSongSuccess", "Song added successfully: ${songs}")
-                    }
-
-                }else{
-                    val errorResponse = response.errorBody()?.string()
-                    Log.e("Error", "Error Listing Songs: $errorResponse")
+                    val jsonResponse = response.body().toString()
+                    val songList = parseSongs(jsonResponse)
+                    Log.d("XDD", "song name: " + songList.get(1).title)
+                } else {
+                    // Handle the error case
                 }
             }
 
-            override fun onFailure(call: Call<List<Song>>, t: Throwable) {
-                // Handle failure
+            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                // Handle the failure case
             }
         })
 
     }
 
 
+}
+
+fun parseSongs(jsonResponse: String): List<Song> {
+    val gson = Gson()
+    val jsonObject = gson.fromJson(jsonResponse, JsonObject::class.java)
+    val jsonSongsArray = jsonObject.getAsJsonArray("songs") // Extract the "songs" array
+    val songs = mutableListOf<Song>()
+
+    jsonSongsArray.forEach { jsonElement ->
+        val song = gson.fromJson(jsonElement, Song::class.java)
+        songs.add(song)
+    }
+
+    return songs
 }
 
 
