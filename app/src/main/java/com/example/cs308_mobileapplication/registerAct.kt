@@ -3,28 +3,22 @@ package com.example.cs308_mobileapplication
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.RatingBar
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.interaction.PressInteraction
-import androidx.core.view.get
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.Gson
-import com.google.gson.JsonParser
+import com.google.gson.JsonObject
+import com.google.gson.annotations.SerializedName
 import okhttp3.OkHttpClient
-import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONObject
 import retrofit2.Call
@@ -37,11 +31,6 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
-import com.google.gson.JsonArray
-import com.google.gson.JsonElement
-import com.google.gson.JsonObject
-import com.google.gson.annotations.SerializedName
-import kotlin.math.log
 
 
 //Creating Retrofit INSTANCE
@@ -58,8 +47,10 @@ interface UserService {
         @Body songData: SongData
     ): Call<AddSongResponse>
 
-    @GET("/")
-    fun getSongs(): Call<JsonObject>
+    @GET("/songs")
+    fun getSongs(
+        @Header("Authorization") authToken: String
+    ): Call<JsonObject>
 
 
 }
@@ -94,15 +85,14 @@ data class User(
 data class SignupResponse(
     val userId: String
 )
-
 data class Song(
     @SerializedName("_id")
     val id: String,
     val title: String,
-    val performers: List<Performer>,
+    val performer: List<Performer>,
     val album: Album,
-    val genre: String,
-    val rating: Int
+    val genre: String?,
+    val userRating: Int?
 )
 
 
@@ -513,7 +503,8 @@ class Allsongs : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.allsongsnew)
-        RetrofitClient.instance.getSongs().enqueue(object : Callback<JsonObject> {
+        var userId : String = getUserId(this@Allsongs).toString()
+        RetrofitClient.instance.getSongs(userId).enqueue(object : Callback<JsonObject> {
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                 if (response.isSuccessful) {
                     val jsonResponse = response.body().toString()
@@ -540,12 +531,12 @@ class Allsongs : ComponentActivity() {
 
             // Set the song details
             nameTextView.text = song.title
-            artistsTextView.text = song.performers.joinToString { performer -> performer.name }
+            artistsTextView.text = song.performer.joinToString { performer -> performer.name }
             albumTextView.text = song.album.name
             genreTextView.text = song.genre
 
             // Set up the spinner
-            setupRatingSpinner(ratingSpinner, song.rating)
+            //setupRatingSpinner(ratingSpinner, song.currentUserRat)
 
             // Add the view to the container
             container.addView(songView)
