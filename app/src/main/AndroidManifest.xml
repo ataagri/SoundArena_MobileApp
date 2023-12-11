@@ -33,7 +33,7 @@
         <activity android:name=".Mysongs"/>
         <activity android:name=".Entermanually"/>
         <activity android:name=".Addsongs"/>
-        <activity android:name=".Uploadfile"/>
+        <activity android:name=".Sortbygenre"/>
         <activity android:name=".Allsongs"/>
         <activity android:name=".Alluser"/>
         <activity android:name=".FriendList"/>
