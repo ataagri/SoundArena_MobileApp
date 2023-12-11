@@ -85,6 +85,15 @@ interface UserService {
         @Header("Authorization") authToken: String
     ): Call<LikeSongResponse>
 
+    @GET("/getusers")
+    fun getUsers():Call<JsonObject>
+
+    @POST("/addfriend")
+    fun addFriend(
+        @Header("Authorization")authToken: String,
+        @Body friendMail: friendMailBody
+    ): Call<AddFriendResponse>
+
 }
 object RetrofitClient {
     private const val SERVER_URL = "http://10.0.2.2:3000/"
@@ -126,6 +135,9 @@ data class Song(
     val genre: String,
     val userRating: Int?
 )
+data class friendMailBody(
+    val friendEmail: String
+)
 
 
 data class Performer(
@@ -154,6 +166,15 @@ data class LoginResponse(
     val token: String,
     val userId: String
 )
+
+data class UserResponse(val users: List<UserD>)
+
+data class UserD(
+    @SerializedName("_id")
+    val id: String,
+    val email: String,
+    val friends: List<String>,
+)
 data class SongData(
     val title: String,
     val genre: String,
@@ -162,6 +183,10 @@ data class SongData(
     val rating: Int?
 )
 data class AddSongResponse(
+    val message: String
+)
+
+data class AddFriendResponse(
     val message: String
 )
 fun saveUserToken(context: Context, userToken: String){
@@ -387,6 +412,7 @@ class Mainpage : ComponentActivity() {
         val addSongsButton = findViewById<Button>(R.id.addSongButton)
         val logOutButton = findViewById<Button>(R.id.logOutButton)
         val allSongsButton = findViewById<Button>(R.id.allSongsButton)
+        val allUsersButton = findViewById<Button>(R.id.allUsersButton)
 
         mySongsButton.setOnClickListener{
             val toMySongs = Intent(this, Mysongs::class.java)
@@ -407,6 +433,10 @@ class Mainpage : ComponentActivity() {
         allSongsButton.setOnClickListener {
             val toAllSongs = Intent(this, Allsongs::class.java)
             startActivity(toAllSongs)
+        }
+        allUsersButton.setOnClickListener {
+            val toAllUser = Intent(this, Alluser::class.java)
+            startActivity(toAllUser)
         }
 
     }
@@ -876,3 +906,65 @@ data class addedSongs(
 
 
 
+class Alluser: ComponentActivity(){
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.allusers)
+        val mainMenuButton = findViewById<Button>(R.id.mainMenuButton)
+        mainMenuButton.setOnClickListener {
+            val toMainPage = Intent(this, Mainpage::class.java)
+            startActivity(toMainPage)
+        }
+        RetrofitClient.instance.getUsers().enqueue(object : Callback<JsonObject>{
+            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                if (response.isSuccessful) {
+                    // Log the successful response
+                    val gson = Gson()
+                    val userResponse = gson.fromJson(response.body().toString(), UserResponse::class.java)
+                    val usersList = userResponse.users
+                    addUserstoView(usersList)
+
+
+                    usersList.forEach { user ->
+                        Log.d("User", "User: $user")
+                    }
+                } else {
+                    Log.e("ResponseError", "Error Code: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                // Log the failure
+                Log.e("ResponseFailure", "Error: ${t.message}")
+            }        })
+    }
+
+    private fun addUserstoView(users: List<UserD>) {
+        val container: LinearLayout = findViewById(R.id.allUsersContainer)
+        for (i in users.indices) {
+            val user = users[i]
+            val userView = LayoutInflater.from(this).inflate(R.layout.user_view, container, false)
+            val emailText = userView.findViewById<TextView>(R.id.userEmail)
+            val friendButton = userView.findViewById<Button>(R.id.addFriendButton)
+
+            // Set the song details
+            emailText.text = user.email
+            val friendEmailBody = friendMailBody(user.email)
+            friendButton.setOnClickListener {
+                RetrofitClient.instance.addFriend(getUserToken(this).toString(),friendEmailBody).enqueue(object : Callback<AddFriendResponse>{
+                    override fun onResponse(
+                        call: Call<AddFriendResponse>,
+                        response: Response<AddFriendResponse>
+                    ) {
+                        //XD
+                    }
+
+                    override fun onFailure(call: Call<AddFriendResponse>, t: Throwable) {
+                        //XD
+                    }
+                })
+            }
+            container.addView(userView)
+        }
+    }
+}
