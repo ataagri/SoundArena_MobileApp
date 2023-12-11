@@ -37,6 +37,7 @@
         <activity android:name=".Allsongs"/>
         <activity android:name=".Alluser"/>
         <activity android:name=".FriendList"/>
+        <activity android:name=".Recommendations"/>
     </application>
 
 </manifest>
