@@ -271,6 +271,18 @@
             android:textStyle="bold" />
 
         <Button
+            android:id="@+id/friendsButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:backgroundTint="@color/newGrey"
+            android:fontFamily="sans-serif-thin"
+            android:text="Friends"
+            android:textColor="@color/spotifyGreen"
+            android:textStyle="bold" />
+
+        <Button
             android:id="@+id/logOutButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
