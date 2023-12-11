@@ -100,6 +100,12 @@ interface UserService {
         @Body requestBody: GenreRequest
     ): Call<JsonObject>
 
+    @GET("/recommendation")
+    fun recommendSongs(
+        @Header("Authorization") authToken: String
+    ): Call<JsonObject>
+
+
 }
 object RetrofitClient {
     private const val SERVER_URL = "http://10.0.2.2:3000/"
@@ -428,6 +434,20 @@ class Mainpage : ComponentActivity() {
         val friendListButton = findViewById<Button>(R.id.friendsButton)
         val topTenButton = findViewById<Button>(R.id.topTenButton)
 
+        RetrofitClient.instance.recommendSongs(getUserToken(this@Mainpage).toString()).enqueue(object : Callback<JsonObject>{
+            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                val jsonResponse = response.body().toString()
+                val songList = parseRecommendedSongs(jsonResponse)
+                addSongsToView(songList)
+            }
+
+            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                //XDDDD
+            }
+        })
+
+
+
         mySongsButton.setOnClickListener{
             val toMySongs = Intent(this, Mysongs::class.java)
             startActivity(toMySongs)
@@ -464,7 +484,83 @@ class Mainpage : ComponentActivity() {
 
 
     }
+    private fun rateSong(songId: String, rating: Int) {
+        val authToken = getUserToken(this) // Retrieve the stored auth token
+        val ratingData = RatingData(rating)
 
+        if (authToken != null) {
+            RetrofitClient.instance.rateSong(songId, authToken, ratingData).enqueue(object : Callback<RateSongResponse> {
+                override fun onResponse(call: Call<RateSongResponse>, response: Response<RateSongResponse>) {
+                    if (response.isSuccessful) {
+
+                    } else {
+
+                    }
+                }
+
+                override fun onFailure(call: Call<RateSongResponse>, t: Throwable) {
+                    // Handle network failure or systemic error
+                }
+            })
+        }
+
+    }
+
+    private fun addSongsToView(songs: List<Song>) {
+        val container: LinearLayout = findViewById(R.id.topTenContainer)
+        container.removeAllViews()
+        for (i in songs.indices) {
+            if (i < 10){
+                val song = songs[i]
+                val songView = LayoutInflater.from(this).inflate(R.layout.song_view, container, false)
+                val nameTextView: TextView = songView.findViewById(R.id.name)
+                val artistsTextView: TextView = songView.findViewById(R.id.artists)
+                val albumTextView: TextView = songView.findViewById(R.id.album)
+                val genreTextView: TextView = songView.findViewById(R.id.genre)
+                val ratingSpinner: Spinner = songView.findViewById(R.id.rating)
+
+                // Set the song details
+                nameTextView.text = song.title
+                artistsTextView.text = song.performer.joinToString { performer -> performer.name }
+                albumTextView.text = song.album.name
+                genreTextView.text = song.genre
+                setupRatingSpinner(ratingSpinner, song.userRating)
+                ratingSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                        val selectedRating = parent.getItemAtPosition(position).toString().toIntOrNull()
+                        selectedRating?.let {
+                            // Call the Retrofit method to rate the song
+                            rateSong(song.id, it)
+                        }
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>) {}
+                }
+                container.addView(songView)
+
+                if (i < songs.size - 1) {
+                    val dividerView = LayoutInflater.from(this).inflate(R.layout.divider, container, false)
+                    container.addView(dividerView)
+                }
+            }
+        }
+    }
+
+    private fun setupRatingSpinner(spinner: Spinner, rating: Int?) {
+        val ratingAdapter = ArrayAdapter.createFromResource(
+            this,
+            R.array.rating_numbers,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = adapter
+        }
+
+        rating?.let {
+            val ratingPosition = ratingAdapter.getPosition(it.toString())
+            spinner.setSelection(ratingPosition, true)
+        }
+    }
 
 
 }
@@ -717,6 +813,29 @@ fun parseFavouriteSongs(jsonResponse: String): List<Song> {
         Log.e("parseSongs", "Error parsing songs: ${e.message}")
         return emptyList()  // Return an empty list in case of error
     }
+
+
+}
+
+fun parseRecommendedSongs(jsonResponse: String): List<Song> {
+    val gson = Gson()
+    try {
+        val jsonObject = gson.fromJson(jsonResponse, JsonObject::class.java)
+        val jsonSongsArray = jsonObject.getAsJsonArray("recommendedSongs")  // Extract the "songs" array
+
+        val songs = mutableListOf<Song>()
+        jsonSongsArray.forEach { jsonElement ->
+            val song = gson.fromJson(jsonElement, Song::class.java)
+            songs.add(song)
+        }
+
+        return songs
+    } catch (e: Exception) {
+        Log.e("parseSongs", "Error parsing songs: ${e.message}")
+        return emptyList()  // Return an empty list in case of error
+    }
+
+
 }
 
 class Allsongs : ComponentActivity() {
