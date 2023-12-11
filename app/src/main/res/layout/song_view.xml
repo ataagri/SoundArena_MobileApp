@@ -53,5 +53,4 @@
         android:layout_marginRight="20dp"
         android:entries="@array/rating_numbers"/>
 
-
 </RelativeLayout>
