@@ -36,6 +36,7 @@
         <activity android:name=".Uploadfile"/>
         <activity android:name=".Allsongs"/>
         <activity android:name=".Alluser"/>
+        <activity android:name=".FriendList"/>
     </application>
 
 </manifest>
