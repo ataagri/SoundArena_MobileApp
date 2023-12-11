@@ -4,13 +4,21 @@
     android:orientation="vertical"
     android:background="@color/backgroundGrey"
     android:padding="16dp">
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:textColor="@color/spotifyGreen"
+        android:text="Top 10"
+        android:textSize="25dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
     <Spinner
         android:id="@+id/selectGenre"
         android:background="@color/newGrey"
         android:layout_width="match_parent"
+        android:layout_marginTop="30dp"
         android:layout_height="50dp"
-        android:layout_marginRight="20dp"
+        android:layout_gravity="center_horizontal"
         android:entries="@array/genres"/>
 
     <ScrollView
