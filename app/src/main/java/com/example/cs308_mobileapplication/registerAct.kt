@@ -844,7 +844,7 @@ class Addsongs : ComponentActivity() {
 
     private fun openFileChooser() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.type = "text/csv"
+        intent.type = ""
         intent.addCategory(Intent.CATEGORY_OPENABLE)
 
         try {
