@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -32,6 +33,7 @@
         <activity android:name=".Mysongs"/>
         <activity android:name=".Entermanually"/>
         <activity android:name=".Addsongs"/>
+        <activity android:name=".Uploadfile"/>
         <activity android:name=".Allsongs"/>
         <activity android:name=".Alluser"/>
     </application>

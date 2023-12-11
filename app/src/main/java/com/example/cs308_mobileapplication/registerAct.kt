@@ -555,20 +555,7 @@ class Mysongs : ComponentActivity() {
     }
     }
 
-class Addsongs : ComponentActivity(){
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.addsongs)
-
-        val enterManuallyButton = findViewById<Button>(R.id.manualButton)
-
-        enterManuallyButton.setOnClickListener {
-            val toEnterManually = Intent(this, Entermanually::class.java)
-            startActivity(toEnterManually)
-        }
-    }
-}
 
 class Entermanually : ComponentActivity(){
 
@@ -791,7 +778,7 @@ class Allsongs : ComponentActivity() {
     }
 }
 
-class Uploadfile : ComponentActivity() {
+class Addsongs : ComponentActivity() {
 
     companion object {
         private const val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1
@@ -800,10 +787,16 @@ class Uploadfile : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.addsongs) // Replace with your actual layout file
+        setContentView(R.layout.addsongs)
+        val uploadButton = findViewById<Button>(R.id.lmao)
+        val enterManuallyButton = findViewById<Button>(R.id.manualButton)
 
-        val uploadButton: Button = findViewById(R.id.uploadButton)
+        enterManuallyButton.setOnClickListener {
+            val toEnterManually = Intent(this, Entermanually::class.java)
+            startActivity(toEnterManually)
+        }
         uploadButton.setOnClickListener {
+
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this,
