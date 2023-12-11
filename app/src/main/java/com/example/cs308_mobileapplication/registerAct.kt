@@ -7,6 +7,7 @@ import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.LinearLayout
@@ -31,6 +32,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Path
 
 
 //Creating Retrofit INSTANCE
@@ -52,6 +54,26 @@ interface UserService {
         @Header("Authorization") authToken: String
     ): Call<JsonObject>
 
+
+    @GET("/getliked-songs/{userId}")
+    fun getLikedSongs(
+        @Path("userId") userId: String,
+        @Header("Authorization") authToken: String
+    ): Call<JsonObject>
+
+
+    @PUT("rate-song/{songId}")
+    fun rateSong(
+        @Path("songId") songId: String,
+        @Header("Authorization") authToken: String,
+        @Body ratingData: RatingData
+    ): Call<RateSongResponse>
+
+    @POST("like-song/{songId}")
+    fun likeSong(
+        @Path("songId") songId : String,
+        @Header("Authorization") authToken: String
+    ): Call<LikeSongResponse>
 
 }
 object RetrofitClient {
@@ -91,7 +113,7 @@ data class Song(
     val title: String,
     val performer: List<Performer>,
     val album: Album,
-    val genre: String?,
+    val genre: String,
     val userRating: Int?
 )
 
@@ -103,6 +125,19 @@ data class Performer(
 data class Album(
     val name: String
 )
+
+data class RatingData(
+    val rating: Int
+)
+
+data class RateSongResponse(
+    val message: String,
+    val song: Song
+)
+data class LikeSongResponse(
+    val message: String
+)
+
 
 
 data class LoginResponse(
@@ -119,24 +154,44 @@ data class SongData(
 data class AddSongResponse(
     val message: String
 )
-fun saveUserId(context: Context, userToken: String){
-    val sharedPreferences = context.getSharedPreferences("MySharedPref",Context.MODE_PRIVATE)
+fun saveUserToken(context: Context, userToken: String){
+    val sharedPreferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
     val editor = sharedPreferences.edit()
-    editor.putString("token","Bearer " + userToken)
+    editor.putString("token", "Bearer $userToken")
     editor.apply()
 }
 
-fun getUserId(context: Context): String? {
-    val sharedPreferences = context.getSharedPreferences("MySharedPref", Context.MODE_PRIVATE)
+fun getUserToken(context: Context): String? {
+    val sharedPreferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
     return sharedPreferences.getString("token", null)
 }
 
-fun clearUserId(context: Context) {
-    val sharedPreferences = context.getSharedPreferences("MySharedPref", Context.MODE_PRIVATE)
+fun saveUserId(context: Context, userId: String){
+    val sharedPreferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
     val editor = sharedPreferences.edit()
-    editor.remove("userId")
+    editor.putString("Id", userId)
     editor.apply()
 }
+
+fun getUserId(context: Context): String?{
+    val sharedPreferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+    return sharedPreferences.getString("Id", null) // Corrected key here
+}
+
+fun clearUserToken(context: Context) {
+    val sharedPreferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+    val editor = sharedPreferences.edit()
+    editor.remove("token")
+    editor.apply()
+}
+
+fun clearUserId(context: Context){
+    val sharedPreferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+    val editor = sharedPreferences.edit()
+    editor.remove("Id")
+    editor.apply()
+}
+
 
 
 class RegisterAct : ComponentActivity() {
@@ -278,7 +333,9 @@ class LoginAct : ComponentActivity() {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>){
                 if(response.isSuccessful){
                     response.body()?.let {
-                        saveUserId(this@LoginAct, it.token)
+                        saveUserToken(this@LoginAct, it.token)
+                        saveUserId(this@LoginAct,it.userId)
+                        Log.d("XDDDDDDDD", getUserId(this@LoginAct).toString())
                     }
                     val toMainPage = Intent(this@LoginAct, Mainpage::class.java)
                     startActivity(toMainPage)
@@ -333,7 +390,7 @@ class Mainpage : ComponentActivity() {
 
         logOutButton.setOnClickListener {
             val toLogin = Intent(this, LoginAct::class.java)
-            clearUserId(this@Mainpage)
+            clearUserToken(this@Mainpage)
             startActivity(toLogin)
         }
 
@@ -348,20 +405,115 @@ class Mainpage : ComponentActivity() {
 
 }
 
-class Mysongs : ComponentActivity(){
-
-    override fun onCreate(savedInstanceState: Bundle?){
+class Mysongs : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.mysongs)
-
         val mainMenuButton = findViewById<Button>(R.id.mainMenuButton)
+        mainMenuButton.setOnClickListener {
+            val toMainPage = Intent(this,Mainpage::class.java)
+            startActivity(toMainPage)
+        }
+        var userId : String = getUserToken(this@Mysongs).toString()
+        RetrofitClient.instance.getSongs(userId).enqueue(object : Callback<JsonObject> {
+            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                if (response.isSuccessful) {
+                    val jsonResponse = response.body().toString()
+                    val songList = parseSongs(jsonResponse)
+                    Log.d("XDD",songList.get(1).title)
+                    addSongsToView(songList) // Call this method to add views
+                }
+            }
 
-        mainMenuButton.setOnClickListener{
-            val toMainpage = Intent(this, Mainpage::class.java)
-            startActivity(toMainpage)
+            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                Log.e("Allsongs", "Network error: ${t.message}")            }
+        })
+    }
+
+    private fun addSongsToView(songs: List<Song>) {
+        val container: LinearLayout = findViewById(R.id.mySongsContainer)
+        for (i in songs.indices) {
+            if (songs[i].userRating != null) {
+                val song = songs[i]
+                val songView =
+                    LayoutInflater.from(this).inflate(R.layout.song_view, container, false)
+                val nameTextView: TextView = songView.findViewById(R.id.name)
+                val artistsTextView: TextView = songView.findViewById(R.id.artists)
+                val albumTextView: TextView = songView.findViewById(R.id.album)
+                val genreTextView: TextView = songView.findViewById(R.id.genre)
+                val ratingSpinner: Spinner = songView.findViewById(R.id.rating)
+
+                // Set the song details
+                nameTextView.text = song.title
+                artistsTextView.text = song.performer.joinToString { performer -> performer.name }
+                albumTextView.text = song.album.name
+                genreTextView.text = song.genre
+                setupRatingSpinner(ratingSpinner, song.userRating)
+                ratingSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>,
+                        view: View,
+                        position: Int,
+                        id: Long
+                    ) {
+                        val selectedRating =
+                            parent.getItemAtPosition(position).toString().toIntOrNull()
+                        selectedRating?.let {
+                            // Call the Retrofit method to rate the song
+                            rateSong(song.id, it)
+                        }
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>) {}
+                }
+                container.addView(songView)
+
+                if (i < songs.size - 1) {
+                    val dividerView =
+                        LayoutInflater.from(this).inflate(R.layout.divider, container, false)
+                    container.addView(dividerView)
+                }
+            }
+        }
+
+    }
+    private fun setupRatingSpinner(spinner: Spinner, rating: Int?) {
+        val ratingAdapter = ArrayAdapter.createFromResource(
+            this,
+            R.array.rating_numbers,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = adapter
+        }
+
+        rating?.let {
+            val ratingPosition = ratingAdapter.getPosition(it.toString())
+            spinner.setSelection(ratingPosition, true)
         }
     }
-}
+    private fun rateSong(songId: String, rating: Int) {
+        val authToken = getUserToken(this) // Retrieve the stored auth token
+        val ratingData = RatingData(rating)
+
+        if (authToken != null) {
+            RetrofitClient.instance.rateSong(songId, authToken, ratingData).enqueue(object : Callback<RateSongResponse> {
+                override fun onResponse(call: Call<RateSongResponse>, response: Response<RateSongResponse>) {
+                    if (response.isSuccessful) {
+
+                    } else {
+
+                    }
+                }
+
+                override fun onFailure(call: Call<RateSongResponse>, t: Throwable) {
+                    // Handle network failure or systemic error
+                }
+            })
+        }
+
+    }
+    }
 
 class Addsongs : ComponentActivity(){
 
@@ -438,7 +590,7 @@ class Entermanually : ComponentActivity(){
             }else{
                 postRating = rating.toInt()
             }
-            val userToken = getUserId(this@Entermanually).toString()
+            val userToken = getUserToken(this@Entermanually).toString()
 
             if(addSongBool){
                 var songData = SongData(
@@ -503,7 +655,12 @@ class Allsongs : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.allsongsnew)
-        var userId : String = getUserId(this@Allsongs).toString()
+        val mainMenuButton = findViewById<Button>(R.id.mainMenuButton)
+        mainMenuButton.setOnClickListener{
+            val toMainPage = Intent(this, Mainpage::class.java)
+            startActivity(toMainPage)
+        }
+        var userId : String = getUserToken(this@Allsongs).toString()
         RetrofitClient.instance.getSongs(userId).enqueue(object : Callback<JsonObject> {
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                 if (response.isSuccessful) {
@@ -520,8 +677,9 @@ class Allsongs : ComponentActivity() {
     }
 
     private fun addSongsToView(songs: List<Song>) {
-        val container: LinearLayout = findViewById(R.id.songsContainer)
-        for (song in songs) {
+        val container: LinearLayout = findViewById(R.id.allSongsContainer)
+        for (i in songs.indices) {
+            val song = songs[i]
             val songView = LayoutInflater.from(this).inflate(R.layout.song_view, container, false)
             val nameTextView: TextView = songView.findViewById(R.id.name)
             val artistsTextView: TextView = songView.findViewById(R.id.artists)
@@ -534,15 +692,48 @@ class Allsongs : ComponentActivity() {
             artistsTextView.text = song.performer.joinToString { performer -> performer.name }
             albumTextView.text = song.album.name
             genreTextView.text = song.genre
+            setupRatingSpinner(ratingSpinner, song.userRating)
+            ratingSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                    val selectedRating = parent.getItemAtPosition(position).toString().toIntOrNull()
+                    selectedRating?.let {
+                        // Call the Retrofit method to rate the song
+                        rateSong(song.id, it)
+                    }
+                }
 
-            // Set up the spinner
-            //setupRatingSpinner(ratingSpinner, song.currentUserRat)
-
-            // Add the view to the container
+                override fun onNothingSelected(parent: AdapterView<*>) {}
+            }
             container.addView(songView)
+
+            if (i < songs.size - 1) {
+                val dividerView = LayoutInflater.from(this).inflate(R.layout.divider, container, false)
+                container.addView(dividerView)
+            }
         }
     }
 
+    private fun rateSong(songId: String, rating: Int) {
+        val authToken = getUserToken(this) // Retrieve the stored auth token
+        val ratingData = RatingData(rating)
+
+        if (authToken != null) {
+            RetrofitClient.instance.rateSong(songId, authToken, ratingData).enqueue(object : Callback<RateSongResponse> {
+                override fun onResponse(call: Call<RateSongResponse>, response: Response<RateSongResponse>) {
+                    if (response.isSuccessful) {
+
+                    } else {
+
+                    }
+                }
+
+                override fun onFailure(call: Call<RateSongResponse>, t: Throwable) {
+                    // Handle network failure or systemic error
+                }
+            })
+        }
+
+    }
     private fun setupRatingSpinner(spinner: Spinner, rating: Int?) {
         val ratingAdapter = ArrayAdapter.createFromResource(
             this,
