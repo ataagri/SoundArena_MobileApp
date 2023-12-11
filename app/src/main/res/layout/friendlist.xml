@@ -11,7 +11,7 @@
         android:layout_weight="1">
 
         <LinearLayout
-            android:id="@+id/allUsersContainer"
+            android:id="@+id/friendsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
