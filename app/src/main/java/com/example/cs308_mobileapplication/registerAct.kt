@@ -143,7 +143,7 @@ data class Song(
     val id: String,
     val title: String,
     val performer: List<Performer>,
-    val album: Album,
+    val album: Album?,
     val genre: String,
     val userRating: Int?
 )
@@ -163,7 +163,7 @@ data class Performer(
 )
 
 data class Album(
-    val name: String
+    val name: String?
 )
 
 data class RatingData(
@@ -195,7 +195,7 @@ data class UserD(
 )
 data class SongData(
     val title: String,
-    val genre: String,
+    val genre: String?,
     val album: String,
     val performer: List<String>,
     val rating: Int?
@@ -521,7 +521,7 @@ class Mysongs : ComponentActivity() {
                 // Set the song details
                 nameTextView.text = song.title
                 artistsTextView.text = song.performer.joinToString { performer -> performer.name }
-                albumTextView.text = song.album.name
+                albumTextView.text = song.album?.name ?: "No Album"
                 genreTextView.text = song.genre
                 setupRatingSpinner(ratingSpinner, song.userRating)
                 ratingSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -792,7 +792,7 @@ class Allsongs : ComponentActivity() {
             // Set the song details
             nameTextView.text = song.title
             artistsTextView.text = song.performer.joinToString { performer -> performer.name }
-            albumTextView.text = song.album.name
+            albumTextView.text = song.album?.name ?: "No Album"
             genreTextView.text = song.genre
             setupRatingSpinner(ratingSpinner, song.userRating)
             ratingSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -1150,7 +1150,7 @@ class Sortbygenre : ComponentActivity(){
                 // Set the song details
                 nameTextView.text = song.title
                 artistsTextView.text = song.performer.joinToString { performer -> performer.name }
-                albumTextView.text = song.album.name
+                albumTextView.text = song.album?.name ?: "No Album"
                 genreTextView.text = song.genre
                 setupRatingSpinner(ratingSpinner, song.userRating)
                 ratingSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -1272,7 +1272,7 @@ class Recommendations : ComponentActivity(){
                 // Set the song details
                 nameTextView.text = song.title
                 artistsTextView.text = song.performer.joinToString { performer -> performer.name }
-                albumTextView.text = song.album.name
+                albumTextView.text = song.album?.name ?: "No Album"
                 genreTextView.text = song.genre
                 setupRatingSpinner(ratingSpinner, song.userRating)
                 ratingSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
