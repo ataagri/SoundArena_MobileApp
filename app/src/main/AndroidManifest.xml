@@ -32,6 +32,7 @@
         <activity android:name=".Entermanually"/>
         <activity android:name=".Addsongs"/>
         <activity android:name=".Allsongs"/>
+        <activity android:name=".Alluser"/>
     </application>
 
 </manifest>
