@@ -15,7 +15,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="75dp"
         android:fontFamily="sans-serif-thin"
-        android:text="Welcome."
+        android:text="Welcome to\nSound Arena."
         android:textColor="@color/lightGrey"
         android:textSize="40sp" />
 
@@ -26,18 +26,29 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
         android:fontFamily="sans-serif-thin"
-        android:text="Here are some suggestions"
+        android:text="You can navigate"
         android:textColor="@color/lightGrey"
         android:textSize="30sp" />
 
     <TextView
-        android:id="@+id/bottomText"
+        android:id="@+id/bottomText1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="0dp"
         android:fontFamily="sans-serif-thin"
-        android:text="just for you"
+        android:text="through"
+        android:textColor="@color/lightGrey"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/bottomText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="0dp"
+        android:fontFamily="sans-serif-thin"
+        android:text=" buttons."
         android:textColor="@color/spotifyGreen"
         android:textSize="30sp" />
 
