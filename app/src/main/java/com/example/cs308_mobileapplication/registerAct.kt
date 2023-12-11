@@ -1,7 +1,12 @@
 package com.example.cs308_mobileapplication
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.Manifest
+import android.app.Activity
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
@@ -13,7 +18,10 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.Gson
@@ -33,6 +41,8 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import java.io.BufferedReader
+import java.io.InputStreamReader
 
 
 //Creating Retrofit INSTANCE
@@ -149,7 +159,7 @@ data class SongData(
     val genre: String,
     val album: String,
     val performer: List<String>,
-    val rating: Int? = null,
+    val rating: Int?
 )
 data class AddSongResponse(
     val message: String
@@ -750,3 +760,119 @@ class Allsongs : ComponentActivity() {
         }
     }
 }
+
+class Uploadfile : ComponentActivity() {
+
+    companion object {
+        private const val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1
+        private const val REQUEST_CODE_CSV = 2
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.addsongs) // Replace with your actual layout file
+
+        val uploadButton: Button = findViewById(R.id.uploadButton)
+        uploadButton.setOnClickListener {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                    MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE)
+            } else {
+                openFileChooser()
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_CODE_CSV && resultCode == Activity.RESULT_OK) {
+            val selectedFileUri: Uri? = data?.data
+            selectedFileUri?.let {
+                val songs = readCsvFile(this, it)
+                displaySongs(songs)
+            }
+        }
+    }
+
+    private fun displaySongs(songs: List<addedSongs>) {
+        val container: LinearLayout = findViewById(R.id.allSongsContainer) // Adjust ID as necessary
+        songs.forEach { song ->
+            val songView = LayoutInflater.from(this).inflate(R.layout.song_view, container, false)
+
+            // Assuming song_view.xml has TextViews for title, album, rating, performer, and genre
+            songView.findViewById<TextView>(R.id.name).text = song.title
+            songView.findViewById<TextView>(R.id.album).text = song.album
+            songView.findViewById<TextView>(R.id.rating).text = song.rating?.toString() ?: "Not Rated"
+            songView.findViewById<TextView>(R.id.artists).text = song.performer
+            songView.findViewById<TextView>(R.id.genre).text = song.genre
+
+            container.addView(songView)
+        }
+    }
+
+    private fun openFileChooser() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "text/csv"
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+
+        try {
+            startActivityForResult(Intent.createChooser(intent, "Select a CSV file"), REQUEST_CODE_CSV)
+        } catch (ex: ActivityNotFoundException) {
+            Toast.makeText(this, "Please install a file manager", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    // Permission was granted, open file chooser
+                    openFileChooser()
+                } else {
+                    // Permission denied, handle the feature's limitation
+                    Toast.makeText(this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show()
+                }
+                return
+            }
+        }
+    }
+
+    fun readCsvFile(context: Context, fileUri: Uri): MutableList<addedSongs> {
+        val csvSongs = mutableListOf<addedSongs>()
+
+        context.contentResolver.openInputStream(fileUri)?.use { inputStream ->
+            val reader = BufferedReader(InputStreamReader(inputStream))
+            var line: String?
+
+            while (reader.readLine().also { line = it } != null) {
+                val tokens = line!!.split(",")
+                if (tokens.size >= 5) {
+                    val title = tokens[0]
+                    val album = tokens[1]
+                    val rating = if (tokens[2].isNotEmpty()) tokens[2].toIntOrNull() else null
+                    val performer = tokens[3]
+                    val genre = tokens[4]
+
+                    csvSongs.add(addedSongs(title, album, rating, performer, genre))
+                }
+            }
+        }
+        return csvSongs
+    }
+
+}
+
+data class addedSongs(
+    val title: String,
+    val album: String,
+    val rating: Int?,
+    val performer: String,
+    val genre: String
+)
+
+
+
