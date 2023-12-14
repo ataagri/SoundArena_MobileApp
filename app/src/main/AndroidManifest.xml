@@ -18,7 +18,7 @@
         android:largeHeap="true"
         tools:targetApi="34">
         <activity
-            android:name=".RegisterAct"
+            android:name=".pages.RegisterAct"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.CS308_MobileApplication">
@@ -28,16 +28,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginAct"/>
-        <activity android:name=".Mainpage"/>
-        <activity android:name=".Mysongs"/>
-        <activity android:name=".Entermanually"/>
-        <activity android:name=".Addsongs"/>
-        <activity android:name=".Sortbygenre"/>
-        <activity android:name=".Allsongs"/>
-        <activity android:name=".Alluser"/>
-        <activity android:name=".FriendList"/>
-        <activity android:name=".Recommendations"/>
+        <activity android:name=".pages.LoginAct"/>
+        <activity android:name=".pages.Mainpage"/>
+        <activity android:name=".pages.Mysongs"/>
+        <activity android:name=".pages.Entermanually"/>
+        <activity android:name=".pages.Addsongs"/>
+        <activity android:name=".pages.Sortbygenre"/>
+        <activity android:name=".pages.Allsongs"/>
+        <activity android:name=".pages.Alluser"/>
+        <activity android:name=".pages.FriendList"/>
+        <activity android:name=".pages.Recommendations"/>
     </application>
 
 </manifest>

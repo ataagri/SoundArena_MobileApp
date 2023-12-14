@@ -7,7 +7,7 @@
     android:background="@color/backgroundGrey"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".LoginAct">
+    tools:context=".pages.LoginAct">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
