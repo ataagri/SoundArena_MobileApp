@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background">
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/backgroundGrey"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -16,7 +19,7 @@
         android:layout_marginTop="75dp"
         android:fontFamily="sans-serif-thin"
         android:text="Welcome to\nSound Arena."
-        android:textColor="@color/lightGrey"
+        android:textColor="@color/backgroundGrey"
         android:textSize="40sp" />
 
     <TextView
@@ -27,7 +30,7 @@
         android:layout_marginTop="20dp"
         android:fontFamily="sans-serif-thin"
         android:text="You can navigate"
-        android:textColor="@color/lightGrey"
+        android:textColor="@color/backgroundGrey"
         android:textSize="30sp" />
 
     <TextView
@@ -38,7 +41,7 @@
         android:layout_marginTop="0dp"
         android:fontFamily="sans-serif-thin"
         android:text="through"
-        android:textColor="@color/lightGrey"
+        android:textColor="@color/backgroundGrey"
         android:textSize="30sp" />
 
     <TextView
@@ -49,7 +52,7 @@
         android:layout_marginTop="0dp"
         android:fontFamily="sans-serif-thin"
         android:text=" buttons."
-        android:textColor="@color/spotifyGreen"
+        android:textColor="@color/backgroundGrey"
         android:textSize="30sp" />
 
     <LinearLayout
@@ -67,7 +70,7 @@
             android:backgroundTint="@color/newGrey"
             android:fontFamily="sans-serif-thin"
             android:text="All Songs"
-            android:textColor="@color/spotifyGreen"
+            android:textColor="@color/black"
             android:textStyle="bold" />
 
         <Button
@@ -79,7 +82,7 @@
             android:backgroundTint="@color/newGrey"
             android:fontFamily="sans-serif-thin"
             android:text="Top Ten"
-            android:textColor="@color/spotifyGreen"
+            android:textColor="@color/black"
             android:textStyle="bold" />
 
     </LinearLayout>
@@ -99,7 +102,7 @@
             android:backgroundTint="@color/newGrey"
             android:fontFamily="sans-serif-thin"
             android:text="My Songs"
-            android:textColor="@color/spotifyGreen"
+            android:textColor="@color/black"
             android:textStyle="bold" />
 
         <Button
@@ -111,7 +114,7 @@
             android:backgroundTint="@color/newGrey"
             android:fontFamily="sans-serif-thin"
             android:text="Add Song(s)"
-            android:textColor="@color/spotifyGreen"
+            android:textColor="@color/black"
             android:textStyle="bold" />
 
     </LinearLayout>
@@ -131,7 +134,7 @@
             android:backgroundTint="@color/newGrey"
             android:fontFamily="sans-serif-thin"
             android:text="All Users"
-            android:textColor="@color/spotifyGreen"
+            android:textColor="@color/black"
             android:textStyle="bold" />
 
         <Button
@@ -143,7 +146,7 @@
             android:backgroundTint="@color/newGrey"
             android:fontFamily="sans-serif-thin"
             android:text="Recommendation"
-            android:textColor="@color/spotifyGreen"
+            android:textColor="@color/black"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -161,7 +164,7 @@
             android:backgroundTint="@color/newGrey"
             android:fontFamily="sans-serif-thin"
             android:text="Friends"
-            android:textColor="@color/spotifyGreen"
+            android:textColor="@color/black"
             android:textStyle="bold" />
 
         <Button
@@ -173,9 +176,10 @@
             android:backgroundTint="@color/newGrey"
             android:fontFamily="sans-serif-thin"
             android:text="Log Out"
-            android:textColor="@color/spotifyGreen"
+            android:textColor="@color/black"
             android:textStyle="bold" />
 
     </LinearLayout>
 
     </LinearLayout>
+</RelativeLayout>

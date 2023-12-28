@@ -6,31 +6,53 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/backgroundGrey"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:padding="16dp">
 
-        <Button
-            android:id="@+id/lmao"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:backgroundTint="@color/newGrey"
-            android:fontFamily="sans-serif-thin"
-            android:text="Upload\nFile"
-            android:textColor="@color/spotifyGreen"
-            android:textStyle="bold" />
+            android:layout_height="624dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/backgroundGrey"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+                <Button
+                    android:id="@+id/lmao"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/newGrey"
+                    android:fontFamily="sans-serif-thin"
+                    android:text="Upload\nFile"
+                    android:textColor="@color/spotifyGreen"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/manualButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/newGrey"
+                    android:fontFamily="sans-serif-thin"
+                    android:text="Enter\nManually"
+                    android:textColor="@color/spotifyGreen"
+                    android:textStyle="bold" />
+
+        </LinearLayout>
 
         <Button
-            android:id="@+id/manualButton"
-            android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
+            android:id="@+id/mainMenuButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:backgroundTint="@color/newGrey"
             android:fontFamily="sans-serif-thin"
-            android:text="Enter\nManually"
-            android:textColor="@color/spotifyGreen"
+            android:text="Main Menu"
+            android:textColor="@color/black"
             android:textStyle="bold" />
+
 
 </LinearLayout>
