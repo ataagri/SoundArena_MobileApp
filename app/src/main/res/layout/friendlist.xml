@@ -5,6 +5,12 @@
     android:background="@color/backgroundGrey"
     android:padding="16dp">
 
+    <SearchView
+        android:id="@+id/friendSearchButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -24,12 +30,12 @@
         android:id="@+id/mainMenuButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/newGrey"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="20dp"
-        android:textColor="@color/spotifyGreen"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="Main Menu" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:background="@color/newGrey"
+        android:text="Main Menu"
+        android:textColor="#81C784" />
 
 </LinearLayout>

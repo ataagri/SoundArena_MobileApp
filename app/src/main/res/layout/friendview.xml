@@ -7,15 +7,22 @@
 
     <TextView
         android:id="@+id/friendEmail"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
+        android:layout_toLeftOf="@+id/deleteButton"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
         android:text="email"
         android:textColor="@color/black"
         android:textSize="20dp"
         android:textStyle="bold" />
 
-
-
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:text="Delete" />
 
 </RelativeLayout>

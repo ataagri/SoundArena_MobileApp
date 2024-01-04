@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="16dp"
-    android:background="@color/newGrey">
+    android:background="@color/backgroundGrey">
 
     <TextView
         android:id="@+id/name"
@@ -11,7 +11,7 @@
         android:layout_height="30dp"
         android:layout_marginRight="20dp"
         android:text="Song Name"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="20dp"
         android:textStyle="bold" />
 
@@ -22,7 +22,7 @@
         android:id="@+id/artists"
         android:layout_marginRight="20dp"
         android:layout_below="@id/name"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:text="Artist(s)"/>
 
     <TextView
@@ -31,7 +31,7 @@
         android:id="@+id/album"
         android:textSize="20dp"
         android:layout_marginRight="20dp"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:layout_below="@id/artists"
         android:text="Album"/>
 
@@ -43,7 +43,7 @@
         android:layout_below="@id/album"
         android:layout_marginRight="20dp"
         android:text="Genre"
-        android:textColor="@color/black" />
+        android:textColor="@color/white" />
 
     <Spinner
         android:id="@+id/rating"

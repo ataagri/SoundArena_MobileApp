@@ -32,6 +32,12 @@ class Addsongs : ComponentActivity() {
         setContentView(R.layout.addsongs)
         val uploadButton = findViewById<Button>(R.id.lmao)
         val enterManuallyButton = findViewById<Button>(R.id.manualButton)
+        val mainMenuButton = findViewById<Button>(R.id.mainMenuButton)
+
+        mainMenuButton.setOnClickListener {
+            val toMainMenu = Intent(this, Mainpage::class.java)
+            startActivity(toMainMenu)
+        }
 
         enterManuallyButton.setOnClickListener {
             val toEnterManually = Intent(this, Entermanually::class.java)
