@@ -33,6 +33,12 @@ class Addsongs : ComponentActivity() {
         val uploadButton = findViewById<Button>(R.id.lmao)
         val enterManuallyButton = findViewById<Button>(R.id.manualButton)
         val mainMenuButton = findViewById<Button>(R.id.mainMenuButton)
+        val spotifyButton = findViewById<Button>(R.id.spotifyButton)
+
+        spotifyButton.setOnClickListener {
+            val toSpotify = Intent(this, AddSongWithSpotify::class.java)
+            startActivity(toSpotify)
+        }
 
         mainMenuButton.setOnClickListener {
             val toMainMenu = Intent(this, Mainpage::class.java)

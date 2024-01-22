@@ -38,6 +38,7 @@
         <activity android:name=".pages.Alluser"/>
         <activity android:name=".pages.FriendList"/>
         <activity android:name=".pages.Recommendations"/>
+        <activity android:name=".pages.AddSongWithSpotify"/>
     </application>
 
 </manifest>

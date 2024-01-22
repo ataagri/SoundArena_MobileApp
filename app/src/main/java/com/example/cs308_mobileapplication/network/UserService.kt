@@ -8,10 +8,12 @@ import com.example.cs308_mobileapplication.data.LoginResponse
 import com.example.cs308_mobileapplication.data.RateSongResponse
 import com.example.cs308_mobileapplication.data.RatingData
 import com.example.cs308_mobileapplication.data.SignupResponse
+import com.example.cs308_mobileapplication.data.Song
 import com.example.cs308_mobileapplication.data.SongData
 import com.example.cs308_mobileapplication.data.User
 import com.example.cs308_mobileapplication.data.friendMailBody
 import com.google.gson.JsonObject
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -79,6 +81,11 @@ interface UserService {
     fun recommendSongs(
         @Header("Authorization") authToken: String
     ): Call<JsonObject>
+
+    @POST("/search-and-add")
+    fun searchAndAddTrack(
+        @Body trackName: RequestBody
+    ): Call<Song>
 
 
 }
