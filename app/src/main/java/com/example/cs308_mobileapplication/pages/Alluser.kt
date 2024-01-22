@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.SearchView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import com.example.cs308_mobileapplication.R
@@ -26,6 +27,19 @@ class Alluser: ComponentActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.allusers)
         val mainMenuButton = findViewById<Button>(R.id.mainMenuButton)
+        val searchBar = findViewById<SearchView>(R.id.userSearchButton)
+        searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let { filterUsers(it) }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let { filterUsers(it) }
+                return true
+            }
+        })
+
         mainMenuButton.setOnClickListener {
             val toMainPage = Intent(this, Mainpage::class.java)
             startActivity(toMainPage)
@@ -56,6 +70,7 @@ class Alluser: ComponentActivity(){
 
     private fun addUserstoView(users: List<UserD>) {
         val container: LinearLayout = findViewById(R.id.allUsersContainer)
+        container.removeAllViews()
         for (i in users.indices) {
             val user = users[i]
             val userView = LayoutInflater.from(this).inflate(R.layout.user_view, container, false)
@@ -82,5 +97,28 @@ class Alluser: ComponentActivity(){
             }
             container.addView(userView)
         }
+    }
+    private fun filterUsers(query: String) {
+        RetrofitClient.instance.getUsers().enqueue(object : Callback<JsonObject> {
+            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                if (response.isSuccessful) {
+                    val gson = Gson()
+                    val userResponse = gson.fromJson(response.body().toString(), UserResponse::class.java)
+                    val allUsers = userResponse.users
+                    val filteredUsers = if (query.isEmpty()) {
+                        allUsers
+                    } else {
+                        allUsers.filter { user ->
+                            user.email.contains(query, ignoreCase = true)
+                        }
+                    }
+                    addUserstoView(filteredUsers)
+                }
+            }
+
+            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                // Handle failure
+            }
+        })
     }
 }

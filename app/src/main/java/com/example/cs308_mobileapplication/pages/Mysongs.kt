@@ -9,6 +9,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.SearchView
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.activity.ComponentActivity
@@ -29,10 +30,22 @@ class Mysongs : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.mysongs)
         val mainMenuButton = findViewById<Button>(R.id.mainMenuButton)
+        val searchBar = findViewById<SearchView>(R.id.mySongsSearchButton)
         mainMenuButton.setOnClickListener {
             val toMainPage = Intent(this, Mainpage::class.java)
             startActivity(toMainPage)
         }
+        searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let { filterSongs(it) }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let { filterSongs(it) }
+                return true
+            }
+        })
         var userId : String = getUserToken(this@Mysongs).toString()
         RetrofitClient.instance.getSongs(userId).enqueue(object : Callback<JsonObject> {
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
@@ -52,6 +65,7 @@ class Mysongs : ComponentActivity() {
 
     private fun addSongsToView(songs: List<Song>) {
         val container: LinearLayout = findViewById(R.id.mySongsContainer)
+        container.removeAllViews()
         for (i in songs.indices) {
             if (songs[i].userRating != null) {
                 val song = songs[i]
@@ -97,6 +111,34 @@ class Mysongs : ComponentActivity() {
         }
 
     }
+
+    private fun filterSongs(query: String) {
+        var userId: String = getUserToken(this@Mysongs).toString()
+        RetrofitClient.instance.getSongs(userId).enqueue(object : Callback<JsonObject> {
+            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                if (response.isSuccessful) {
+                    val jsonResponse = response.body().toString()
+                    val allSongs = parseSongs(jsonResponse)
+                    val filteredSongs = if (query.isEmpty()) {
+                        allSongs
+                    } else {
+                        allSongs.filter { song ->
+                            (song.title?.contains(query, ignoreCase = true) == true) ||
+                                    song.performer.any { it.name?.contains(query, ignoreCase = true) == true } ||
+                                    (song.album?.name?.contains(query, ignoreCase = true) == true) ||
+                                    (song.genre?.contains(query, ignoreCase = true) == true)
+                        }
+                    }
+                    addSongsToView(filteredSongs)
+                }
+            }
+
+            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                // Handle failure
+            }
+        })
+    }
+
     private fun setupRatingSpinner(spinner: Spinner, rating: Int?) {
         val ratingAdapter = ArrayAdapter.createFromResource(
             this,
