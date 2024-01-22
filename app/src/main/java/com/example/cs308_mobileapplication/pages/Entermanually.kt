@@ -20,6 +20,13 @@ import retrofit2.Response
 
 class Entermanually : ComponentActivity(){
 
+    fun validateSongInput(songName: String, artistName: String, albumName: String, genre: String): Boolean {
+        if (songName.isEmpty()) return false
+        if (artistName.isEmpty()) return false
+        if (albumName.isEmpty()) return false
+        if (genre == "Select Genre") return false
+        return true
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.entermanually)
@@ -44,29 +51,13 @@ class Entermanually : ComponentActivity(){
 
 
         addSongButton.setOnClickListener {
-            addSongBool = true
-            songError.visibility = View.GONE
-            artistError.visibility = View.GONE
-            albumError.visibility = View.GONE
-            genreError.visibility = View.GONE
+            val songName = songNameBox.text.toString()
+            val artistName = artistNameBox.text.toString()
+            val albumName = albumNameBox.text.toString()
+            val genre = genreSpinner.selectedItem.toString()
 
-            var songName = songNameBox.text.toString()
-            if (songName == ""){
-                songError.visibility = View.VISIBLE
-                addSongBool = false
+            val isInputValid = validateSongInput(songName, artistName, albumName, genre)
 
-            }
-            var artistName = artistNameBox.text.toString()
-            if(artistName == ""){
-                artistError.visibility = View.VISIBLE
-                addSongBool = false
-            }
-            var albumName = albumNameBox.text.toString()
-            if(albumName == ""){
-                albumError.visibility = View.VISIBLE
-                addSongBool = false
-            }
-            var genre = genreSpinner.selectedItem.toString()
             if (genre == "Select Genre"){
                 genreError.visibility = View.VISIBLE
                 addSongBool = false
@@ -80,7 +71,7 @@ class Entermanually : ComponentActivity(){
             }
             val userToken = getUserToken(this@Entermanually).toString()
 
-            if(addSongBool){
+            if(addSongBool && isInputValid){
                 var songData = SongData(
                     title = songName,
                     performer = artistName.split(", "),
