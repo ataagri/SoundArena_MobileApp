@@ -36,6 +36,15 @@
             android:textColor="@color/spotifyGreen"
             android:visibility="gone" />
 
+        <TextView
+            android:id="@+id/failureAdd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Please enter a valid song name."
+            android:textColor="@color/warningRed"
+            android:visibility="gone" />
+
         <Button
             android:id="@+id/addSpotfiyButton"
             android:layout_width="wrap_content"
