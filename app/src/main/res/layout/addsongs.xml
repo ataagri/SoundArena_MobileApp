@@ -41,6 +41,18 @@
                     android:textColor="@color/spotifyGreen"
                     android:textStyle="bold" />
 
+                <Button
+                    android:id="@+id/spotifyButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/newGrey"
+                    android:fontFamily="sans-serif-thin"
+                    android:text="Add From Spotify"
+                    android:textColor="@color/spotifyGreen"
+                    android:textStyle="bold" />
+
         </LinearLayout>
 
         <Button
