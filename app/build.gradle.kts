@@ -77,6 +77,7 @@ dependencies {
     testImplementation("org.mockito:mockito-core:3.3.3")
     testImplementation("androidx.test:core:1.3.0")
     testImplementation("androidx.test.ext:junit:1.1.2")
+    testImplementation("junit:junit:4.13.2")
     // Optional: Robolectric for Android specific components
     testImplementation("org.robolectric:robolectric:4.5")
 }

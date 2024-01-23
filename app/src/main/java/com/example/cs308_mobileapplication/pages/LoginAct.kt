@@ -21,6 +21,10 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class LoginAct : ComponentActivity() {
+    enum class LoginResult {
+        Success, NoUser, WrongPassword, Failure
+    }
+
     private lateinit var noUser: TextView
     private lateinit var wrongPass: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,45 +64,53 @@ class LoginAct : ComponentActivity() {
 
     }
 
-    private fun loginUser(email: String, password:String ){
+    fun processLoginResponse(response: Response<LoginResponse>): LoginResult {
+        return if (response.isSuccessful) {
+            response.body()?.let {
+                saveUserToken(this, it.token)
+                saveUserId(this, it.userId)
+            }
+            LoginResult.Success
+        } else {
+            val errorBody = response.errorBody()?.string()
+            val jsonObject = JSONObject(errorBody)
+            val errorMessage = jsonObject.getString("message")
+
+            when {
+                "email could not be found" in errorMessage -> LoginResult.NoUser
+                "Wrong password" in errorMessage -> LoginResult.WrongPassword
+                else -> LoginResult.Failure
+            }
+        }
+    }
+
+    private fun loginUser(email: String, password: String) {
         val user = User(email, password)
-        val call = RetrofitClient.instance.loginUser(user)
-
-        call.enqueue(object: Callback<LoginResponse> {
-            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>){
-                if(response.isSuccessful){
-                    response.body()?.let {
-                        saveUserToken(this@LoginAct, it.token)
-                        saveUserId(this@LoginAct, it.userId)
-                        Log.d("XDDDDDDDD", getUserId(this@LoginAct).toString())
-                    }
-                    val toMainPage = Intent(this@LoginAct, Mainpage::class.java)
-                    startActivity(toMainPage)
-                }else{
-                    val errorBody = response.errorBody()?.string()
-
-                    val jsonObject = JSONObject(errorBody)
-                    val errorMessage = jsonObject.getString("message")
-
-                    when {
-                        "email could not be found" in errorMessage -> {
-                            noUser.visibility = View.VISIBLE
-                            wrongPass.visibility = View.GONE
-                        }
-                        "Wrong password" in errorMessage -> {
-                            wrongPass.visibility = View.VISIBLE
-                            noUser.visibility = View.GONE
-
-
-                        }
-                }
+        RetrofitClient.instance.loginUser(user).enqueue(object: Callback<LoginResponse> {
+            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                val result = processLoginResponse(response)
+                handleLoginResult(result)
             }
-            }
+
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                //No connection
+                // Handle network failure
             }
         })
-
     }
+
+    private fun handleLoginResult(result: LoginResult) {
+        when (result) {
+            LoginResult.Success -> {
+                val toMainPage = Intent(this, Mainpage::class.java)
+                startActivity(toMainPage)
+            }
+            LoginResult.NoUser -> noUser.visibility = View.VISIBLE
+            LoginResult.WrongPassword -> wrongPass.visibility = View.VISIBLE
+            LoginResult.Failure -> {
+                // Handle generic failure
+            }
+        }
+    }
+
 
 }
